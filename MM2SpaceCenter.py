@@ -20,13 +20,10 @@ from mojo.events import addObserver, removeObserver, postEvent
 class MM2SpaceCenter:
     
     def activateModule(self):
-        # init for glyphChangeObserver
-        #addObserver(self, "myObserver", "currentGlyphChanged")
         addObserver(self, "MMPairChangedObserver", "MetricsMachine.currentPairChanged")
         print ('MM2SpaceCenter activated')
 
     def deactivateModule(self, sender):
-        #removeObserver(self, "currentGlyphChanged")
         removeObserver(self, "MetricsMachine.currentPairChanged")
         print ('MM2SpaceCenter deactivated')
 
@@ -36,59 +33,41 @@ class MM2SpaceCenter:
         self.wordlistPath = wordlistPath
         
         self.activateModule()
-        #self.w = FloatingWindow((170, 200), "Kerning Words")
         self.w = Window((200, 50), "MM2SpaceCenter")
-
-        #placeholder, inspired by Copy Names to Clipboard by Erik van Blokland
-        #self.sampleText = [u"👀🔡👀🔡👀🔡👀🔡", u"🔡👀🔡👀🔡👀🔡👀", u"👀🔡👀🔡👀🔡👀🔡", u"🔡👀🔡👀🔡👀🔡👀",u"👀🔡👀🔡👀🔡👀🔡", u"🔡👀🔡👀🔡👀🔡👀",u"👀🔡👀🔡👀🔡👀🔡", u"🔡👀🔡👀🔡👀🔡👀", ]
-        #self.sampleText = [u"🔠👀🚀"]
-        
-        self.sampleText = []
-        #self.sampleText = [u"👀🔡👀🔡👀🔡👀🔡",]
-        
-        #self.w.l = List((0,0,0,-40), self.sampleText)
-        
-        
-        
-        #self.w.l.setSelection([])
         
         self.w.myTextBox = TextBox((10, 10, -10, 17), "MM2SpaceCenter activated 😎", sizeStyle="regular") 
         
-        #print (dir(self.w.myTextBox))
-
         self.w.bind("close", self.deactivateModule)
         self.w.open()
         
 
 
 
-    # def myObserver(self, sender):
-    #     #add code here for when myObserver is triggered
-    #     print ('current glyph changed')
-    #     pass
+
 
 
     def MMPairChangedObserver(self, sender):
         #add code here for when myObserver is triggered
         currentPair = metricsMachine.GetCurrentPair()
-        if not currentPair == self.pair:
-            self.pair = currentPair
+        if currentPair == self.pair:
+            return
         
-            #print ('current MM pair changed', self.pair)
+        self.pair = currentPair
+    
+        #print ('current MM pair changed', self.pair)        
+        self.wordsForMMPair()
         
-            self.wordsForMMPair()
-        
-        pass
+        #pass
         
         
-    def getMetricsMachineController(self):
-        # Iterate through ALL OBJECTS IN PYTHON!
-        import gc
-        for obj in gc.get_objects():
-            if hasattr(obj, "__class__"):
-                # Does this one have a familiar name? Cool. Assume that we have what we are looking for.
-                if obj.__class__.__name__ == "MetricsMachineController":
-                    return obj
+    # def getMetricsMachineController(self):
+    #     # Iterate through ALL OBJECTS IN PYTHON!
+    #     import gc
+    #     for obj in gc.get_objects():
+    #         if hasattr(obj, "__class__"):
+    #             # Does this one have a familiar name? Cool. Assume that we have what we are looking for.
+    #             if obj.__class__.__name__ == "MetricsMachineController":
+    #                 return obj
                 
 
 
@@ -164,7 +143,6 @@ class MM2SpaceCenter:
         #read wordlist file
         import codecs
 
-        #need to figure out how to ignore header, temporarily just deleted it
 
 
         fo = codecs.open(self.wordlistPath, mode="r", encoding="utf-8")
