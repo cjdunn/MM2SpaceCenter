@@ -48,7 +48,7 @@ class MM2SpaceCenter:
 
     def MMPairChangedObserver(self, sender):
         #add code here for when myObserver is triggered
-        currentPair = metricsMachine.GetCurrentPair()
+        currentPair = sender["pair"]
         if currentPair == self.pair:
             return
         
