@@ -17,18 +17,18 @@ from mojo.events import addObserver, removeObserver, postEvent
 
 
 
-class KerningWords:
+class MM2SpaceCenter:
     
     def activateModule(self):
         # init for glyphChangeObserver
         #addObserver(self, "myObserver", "currentGlyphChanged")
         addObserver(self, "MMPairChangedObserver", "MetricsMachine.currentPairChanged")
-        print ('KerningWords activated')
+        print ('MM2SpaceCenter activated')
 
     def deactivateModule(self, sender):
         #removeObserver(self, "currentGlyphChanged")
         removeObserver(self, "MetricsMachine.currentPairChanged")
-        print ('KerningWords deactivated')
+        print ('MM2SpaceCenter deactivated')
 
     def __init__(self, wordlistPath):
         self.font = metricsMachine.CurrentFont()
@@ -305,7 +305,7 @@ cwd = os.path.abspath(pathname)
 wordlistPath_abs = os.path.join(cwd ,wordlistPath_rel)
 
 
-p = KerningWords(wordlistPath= wordlistPath_abs)
+p = MM2SpaceCenter(wordlistPath= wordlistPath_abs)
         
 # to do:       
 # make sure space center "show kerning" is set to on
