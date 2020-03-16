@@ -217,7 +217,7 @@ class MM2SpaceCenter:
         if len(text) == 0:
 
 
-            pairstring = self.checkPairForUnencodedGnames(font, self.pair)
+            pairstring = self.checkPairForUnencodedGnames(self.font, self.pair)
 
             
             previousText = '\\n no words for pair ' + pairstring
@@ -244,12 +244,12 @@ class MM2SpaceCenter:
                 #not sure if I still need space before pairstring, was originally there to deal with / but since using setRaw this isn't an issue
                 #self.setSpaceCenter(font, ' '+pairstring +' not found '+self.ucString(pairstring)+ previousText)
 
-                self.setSpaceCenter(font, ' '+pairstring +' '+self.ucString(pairstring)+ previousText)
+                self.setSpaceCenter(self.font, ' '+pairstring +' '+self.ucString(pairstring)+ previousText)
 
             else:
                 #self.setSpaceCenter(font, ' '+pairstring +' not found ' +self.lcString(pairstring)+ previousText)
 
-                self.setSpaceCenter(font, ' '+pairstring +' ' +self.lcString(pairstring)+ previousText)
+                self.setSpaceCenter(self.font, ' '+pairstring +' ' +self.lcString(pairstring)+ previousText)
 
 
         
@@ -267,23 +267,44 @@ class MM2SpaceCenter:
 
 
 
+def run(wordlistPath_rel):
+    if not len(AllFonts()) > 0:
+        print ('you must have a font open')
+        return
+
+    try:
+        p = metricsMachine.GetCurrentPair()
+        
+    except:
+        print('you must have Metrics Machine open first')
+        return
+            
+
+
+    p = metricsMachine.GetCurrentPair()
+    
+    font = metricsMachine.CurrentFont()
+
+
+  
+    pathname = os.path.dirname(sys.argv[0])        
+    cwd = os.path.abspath(pathname)
+    wordlistPath_abs = os.path.join(cwd ,wordlistPath_rel)
 
 
 
+    p = MM2SpaceCenter(wordlistPath= wordlistPath_abs)    
+            
 
-font = metricsMachine.CurrentFont()
+
+
+   
+
 
 ## set path to word list
 wordlistPath_rel = 'resources/ukacd.txt'
-#wordlistPath_rel = 'resources/ukacd_temp.txt'
 #wordlistPath_rel = 'resources/german.txt'
-          
-pathname = os.path.dirname(sys.argv[0])        
-cwd = os.path.abspath(pathname)
-wordlistPath_abs = os.path.join(cwd ,wordlistPath_rel)
-
-
-p = MM2SpaceCenter(wordlistPath= wordlistPath_abs)
+run(wordlistPath_rel)
         
 # to do:       
 # make sure space center "show kerning" is set to on
