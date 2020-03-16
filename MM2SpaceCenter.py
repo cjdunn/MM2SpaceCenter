@@ -37,7 +37,7 @@ class KerningWords:
         
         self.activateModule()
         #self.w = FloatingWindow((170, 200), "Kerning Words")
-        self.w = Window((200, 50), "Kern-O-Mat")
+        self.w = Window((200, 50), "MM2SpaceCenter")
 
         #placeholder, inspired by Copy Names to Clipboard by Erik van Blokland
         #self.sampleText = [u"👀🔡👀🔡👀🔡👀🔡", u"🔡👀🔡👀🔡👀🔡👀", u"👀🔡👀🔡👀🔡👀🔡", u"🔡👀🔡👀🔡👀🔡👀",u"👀🔡👀🔡👀🔡👀🔡", u"🔡👀🔡👀🔡👀🔡👀",u"👀🔡👀🔡👀🔡👀🔡", u"🔡👀🔡👀🔡👀🔡👀", ]
@@ -52,7 +52,7 @@ class KerningWords:
         
         #self.w.l.setSelection([])
         
-        self.w.myTextBox = TextBox((10, 10, -10, 17), "Kern-O-Mat activated 😎", sizeStyle="regular") 
+        self.w.myTextBox = TextBox((10, 10, -10, 17), "MM2SpaceCenter activated 😎", sizeStyle="regular") 
         
         #print (dir(self.w.myTextBox))
 
