@@ -28,6 +28,9 @@ class MM2SpaceCenter:
         print ('MM2SpaceCenter deactivated')
 
     def __init__(self, wordlistPath):
+
+        self.previousPair = None  # temp workaround for overactive notifications from metricsMachine
+
         self.font = metricsMachine.CurrentFont()
         self.pair = metricsMachine.GetCurrentPair()
         self.wordlistPath = wordlistPath
@@ -47,12 +50,15 @@ class MM2SpaceCenter:
 
 
     def MMPairChangedObserver(self, sender):
-        #add code here for when myObserver is triggered
-        currentPair = metricsMachine.GetCurrentPair()
-        if currentPair == self.pair:
-            return
         
-        self.pair = currentPair
+        # temp workaround for overactive notifications from metricsMachine
+        pair = sender["pair"]
+        if pair == self.previousPair:
+            return
+        self.previousPair = pair
+
+        #add code here for when myObserver is triggered
+        self.pair = pair
     
         #print ('current MM pair changed', self.pair)        
         self.wordsForMMPair()
