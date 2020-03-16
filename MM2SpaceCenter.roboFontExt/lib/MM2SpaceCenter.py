@@ -256,7 +256,7 @@ class MM2SpaceCenter:
         else:
             #set space center if words are found
             #not sure why there's always a /slash in from of the first word, added ' '+ to avoid losing the first word
-            self.setSpaceCenter(font, text)
+            self.setSpaceCenter(self.font, text)
 
 
 
