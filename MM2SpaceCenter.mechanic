@@ -1,0 +1,9 @@
+description: Set Space Center based on MM current pair
+developer: CJ Dunn
+developerURL: http://cjtype.com
+extensionName: 'MM2SpaceCenter'
+extensionPath: MM2SpaceCenter.roboFontExt
+repository: https://github.com/cjdunn/MM2SpaceCenter
+icon: https://raw.githubusercontent.com/cjdunn/MM2SpaceCenter/master/MM2SpaceCenter.roboFontExt/html/MM2SpaceCenterMechanicIcon.png
+tags: [kerning]
+dateAdded: 2020-03-16 01:33:01
