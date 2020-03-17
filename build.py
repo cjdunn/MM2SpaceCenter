@@ -49,7 +49,7 @@ imagePath = os.path.join(basePath, 'MM2SpaceCenterMechanicIcon.png')
 B.icon = imagePath
 
 # version of the extension
-B.version = '0.1.3'
+B.version = '0.1.4'
 
 # should the extension be launched at start-up?
 B.launchAtStartUp = True
