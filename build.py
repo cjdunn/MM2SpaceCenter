@@ -79,7 +79,7 @@ with open(licensePath) as license:
     B.license = license.read()
 
 # expiration date for trial extensions
-B.expireDate = '2021-03-31'
+#B.expireDate = '2021-03-31'
 
 # copy README & imgs to extension docs
 shutil.copyfile(os.path.join(basePath, 'README.md'), os.path.join(htmlPath, 'index.md'))

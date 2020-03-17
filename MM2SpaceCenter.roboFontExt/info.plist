@@ -17,8 +17,6 @@
 	<string>CJType</string>
 	<key>developerURL</key>
 	<string>http://github.com/cjdunn</string>
-	<key>expireDate</key>
-	<string>2021-03-31</string>
 	<key>html</key>
 	<true/>
 	<key>launchAtStartUp</key>
@@ -32,7 +30,7 @@
 	<key>requiresVersionMinor</key>
 	<string>3</string>
 	<key>timeStamp</key>
-	<real>1584478057.3868921</real>
+	<real>1584478180.4580879</real>
 	<key>version</key>
 	<string>0.1.4</string>
 </dict>
