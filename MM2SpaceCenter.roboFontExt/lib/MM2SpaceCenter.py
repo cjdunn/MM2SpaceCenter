@@ -44,8 +44,8 @@ class MM2SpaceCenter:
         
         # language selection
         languageOptions = list(self.languageNames)
-        self.w.source = PopUpButton((10, 32, 85, 20), [], sizeStyle="small", callback=None)
-        print (languageOptions)
+        self.w.source = PopUpButton((10, 32, 85, 20), [], sizeStyle="small", callback=self.changeSourceCallback)
+        #print (languageOptions)
         self.w.source.setItems(languageOptions)
         
         self.w.bind("close", self.deactivateModule)
@@ -71,6 +71,7 @@ class MM2SpaceCenter:
         # read included textfiles
         for textfile in self.textfiles:
             path = bundle.getResourceFilePath(textfile)
+            #print (path)
             with codecs.open(path, mode="r", encoding="utf-8") as fo:
                 lines = fo.read()
 
@@ -87,6 +88,27 @@ class MM2SpaceCenter:
         with open('/usr/share/dict/words', 'r') as userFile:
             lines = userFile.read()
         self.dictWords["user"] = lines.splitlines()
+
+
+
+    def changeSourceCallback(self, sender):
+        """On changing source/wordlist, check if a custom word list should be loaded."""
+        customIndex = len(self.textfiles) + 2
+        if sender.get() == customIndex: # Custom word list
+            try:
+                filePath = getFile(title="Load custom word list", messageText="Select a text file with words on separate lines", fileTypes=["txt"])[0]
+            except TypeError:
+                filePath = None
+                self.customWords = []
+                print("Input of custom word list canceled, using default")
+            if filePath is not None:
+                with codecs.open(filePath, mode="r", encoding="utf-8") as fo:
+                    lines = fo.read()
+                # self.customWords = lines.splitlines()
+                self.customWords = []
+                for line in lines.splitlines():
+                    w = line.strip() # strip whitespace from beginning/end
+                    self.customWords.append(w)
 
 
 
@@ -186,12 +208,17 @@ class MM2SpaceCenter:
     def wordsForMMPair(self, ):
 
         #read wordlist file
-        import codecs
-
-
+        #import codecs
+        
+        
+        #read default from wordlistPath
 
         fo = codecs.open(self.wordlistPath, mode="r", encoding="utf-8")
         wordsAll = fo.read().splitlines()
+        
+        
+        # use custom from dropdown ### not working
+        
 
         contentLimit  = '*****'
         contentStart = wordsAll.index(contentLimit) + 1
@@ -199,6 +226,16 @@ class MM2SpaceCenter:
 
         fo.close()
 
+        self.source = self.w.source.get()
+        
+        #print (self.source)
+        
+        #print (self.languageNames[self.source] )
+        
+        #wordsAll = self.dictWords['german']
+        
+        
+        wordsAll = self.dictWords[self.textfiles[self.source]] 
         
         #default values are hard coded for now
         maxWordCount = 20
