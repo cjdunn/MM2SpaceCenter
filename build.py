@@ -16,20 +16,20 @@ libPath = os.path.join(sourcePath, 'lib')
 htmlPath = os.path.join(sourcePath, 'html')
 
 # folder with resources (icons etc)
-resourcesPath = os.path.join(sourcePath, 'lib/resources')
+resourcesPath = os.path.join(sourcePath, 'resources')
 
 # load license text from file
 # see choosealicense.com for more open-source licenses
 licensePath = os.path.join(basePath, 'source/LICENSE.txt')
 
 # boolean indicating if only .pyc should be included
-pycOnly = True
+pycOnly = ["3.6", "3.7"]
 
 # name of the compiled extension file
 extensionFile = 'MM2SpaceCenter.roboFontExt'
 
 # path of the compiled extension
-buildPath = os.path.join(basePath, '')
+buildPath = basePath
 extensionPath = os.path.join(buildPath, extensionFile)
 
 # initiate the extension builder
@@ -49,7 +49,7 @@ imagePath = os.path.join(resourcesPath, 'html/MM2SpaceCenterMechanicIcon.png')
 B.icon = imagePath
 
 # version of the extension
-B.version = '0.1.2'
+B.version = '0.1.3'
 
 # should the extension be launched at start-up?
 B.launchAtStartUp = True
@@ -83,7 +83,7 @@ B.expireDate = '2021-03-31'
 
 # compile and save the extension bundle
 print('building extension...', end=' ')
-B.save(extensionPath, libPath=libPath, htmlPath=htmlPath, resourcesPath=resourcesPath, pycOnly=["3.6", "3.7"])
+B.save(extensionPath, libPath=libPath, htmlPath=htmlPath, resourcesPath=resourcesPath, pycOnly=pycOnly)
 print('done!')
 
 # check for problems in the compiled extension
