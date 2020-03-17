@@ -1,6 +1,6 @@
 '''build RoboFont Extension'''
 
-import os
+import os, shutil
 from mojo.extensions import ExtensionBundle
 
 # get current folder
@@ -80,6 +80,10 @@ with open(licensePath) as license:
 
 # expiration date for trial extensions
 B.expireDate = '2021-03-31'
+
+# copy README & imgs to extension docs
+shutil.copyfile(os.path.join(basePath, 'README.md'), os.path.join(htmlPath, 'index.md'))
+shutil.copy2(os.path.join(basePath, 'MM2SS.gif'), htmlPath)
 
 # compile and save the extension bundle
 print('building extension...', end=' ')
