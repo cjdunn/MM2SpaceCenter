@@ -3,26 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>addToMenu</key>
-	<array>
-		<dict>
-			<key>path</key>
-			<string>MM2SpaceCenter.py</string>
-			<key>preferredName</key>
-			<string>MM2SpaceCenter</string>
-			<key>shortKey</key>
-			<string></string>
-		</dict>
-	</array>
+	<array/>
 	<key>developer</key>
-	<string>CJType</string>
+	<string>CJ Dunn</string>
 	<key>developerURL</key>
 	<string>http://github.com/cjdunn</string>
 	<key>html</key>
 	<true/>
 	<key>launchAtStartUp</key>
-	<true/>
+	<integer>0</integer>
 	<key>mainScript</key>
-	<string>MM2SpaceCenter.py</string>
+	<string></string>
 	<key>name</key>
 	<string>MM2SpaceCenter</string>
 	<key>requiresVersionMajor</key>
@@ -30,8 +21,8 @@
 	<key>requiresVersionMinor</key>
 	<string>3</string>
 	<key>timeStamp</key>
-	<real>1584478180.4580879</real>
+	<real>1584479220.6565871</real>
 	<key>version</key>
-	<string>0.1.4</string>
+	<string>0.1.5</string>
 </dict>
 </plist>
