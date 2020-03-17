@@ -14,8 +14,9 @@ import metricsMachine
 from vanilla import FloatingWindow, Button, TextBox, List, Window
 from defconAppKit.windows.baseWindow import BaseWindowController
 from mojo.events import addObserver, removeObserver, postEvent
-
-
+from vanilla import *
+from mojo.extensions import *
+import codecs
 
 class MM2SpaceCenter:
     
@@ -33,15 +34,59 @@ class MM2SpaceCenter:
         self.wordlistPath = wordlistPath
         
         self.activateModule()
-        self.w = Window((200, 50), "MM2SpaceCenter")
+        self.w = Window((250, 100), "MM2SpaceCenter")
         
         self.w.myTextBox = TextBox((10, 10, -10, 17), "MM2SpaceCenter activated 😎", sizeStyle="regular") 
+        
+        
+        
+        self.loadDictionaries()
+        
+        # language selection
+        languageOptions = list(self.languageNames)
+        self.w.source = PopUpButton((10, 32, 85, 20), [], sizeStyle="small", callback=None)
+        print (languageOptions)
+        self.w.source.setItems(languageOptions)
         
         self.w.bind("close", self.deactivateModule)
         self.w.open()
         
 
 
+
+    #from word-o-mat
+    def loadDictionaries(self):
+        """Load the available wordlists and read their contents."""
+        self.dictWords = {}
+        self.allWords = []
+        self.outputWords = []
+
+        self.textfiles = ['catalan', 'czech', 'danish', 'dutch', 'ukacd', 'finnish', 'french', 'german', 'hungarian', 'icelandic', 'italian', 'latin', 'norwegian', 'polish', 'slovak', 'spanish', 'vietnamese']
+        self.languageNames = ['Catalan', 'Czech', 'Danish', 'Dutch', 'English', 'Finnish', 'French', 'German', 'Hungarian', 'Icelandic', 'Italian', 'Latin', 'Norwegian', 'Polish', 'Slovak', 'Spanish', 'Vietnamese syllables']
+        #self.source = getExtensionDefault("com.cjtype.MM2SpaceCenter.source", 4)
+
+        bundle = ExtensionBundle("MM2SpaceCenter")
+        contentLimit  = '*****' # If word list file contains a header, start looking for content after this delimiter
+
+        # read included textfiles
+        for textfile in self.textfiles:
+            path = bundle.getResourceFilePath(textfile)
+            with codecs.open(path, mode="r", encoding="utf-8") as fo:
+                lines = fo.read()
+
+            self.dictWords[textfile] = lines.splitlines() # this assumes no whitespace has to be stripped
+
+            # strip header
+            try:
+                contentStart = self.dictWords[textfile].index(contentLimit) + 1
+                self.dictWords[textfile] = self.dictWords[textfile][contentStart:]
+            except ValueError:
+                pass
+
+        # read user dictionary
+        with open('/usr/share/dict/words', 'r') as userFile:
+            lines = userFile.read()
+        self.dictWords["user"] = lines.splitlines()
 
 
 
