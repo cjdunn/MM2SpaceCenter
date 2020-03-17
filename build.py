@@ -1,6 +1,6 @@
 '''build RoboFont Extension'''
 
-import os
+import os, shutil
 from mojo.extensions import ExtensionBundle
 
 # get current folder
@@ -16,20 +16,20 @@ libPath = os.path.join(sourcePath, 'lib')
 htmlPath = os.path.join(sourcePath, 'html')
 
 # folder with resources (icons etc)
-resourcesPath = os.path.join(sourcePath, 'lib/resources')
+resourcesPath = os.path.join(sourcePath, 'resources')
 
 # load license text from file
 # see choosealicense.com for more open-source licenses
 licensePath = os.path.join(basePath, 'source/LICENSE.txt')
 
 # boolean indicating if only .pyc should be included
-pycOnly = True
+pycOnly = ["3.6", "3.7"]
 
 # name of the compiled extension file
 extensionFile = 'MM2SpaceCenter.roboFontExt'
 
 # path of the compiled extension
-buildPath = os.path.join(basePath, '')
+buildPath = basePath
 extensionPath = os.path.join(buildPath, extensionFile)
 
 # initiate the extension builder
@@ -45,11 +45,11 @@ B.developer = 'CJType'
 B.developerURL = 'http://github.com/cjdunn'
 
 # extension icon (file path or NSImage)
-imagePath = os.path.join(resourcesPath, 'html/MM2SpaceCenterMechanicIcon.png')
+imagePath = os.path.join(basePath, 'MM2SpaceCenterMechanicIcon.png')
 B.icon = imagePath
 
 # version of the extension
-B.version = '0.1.2'
+B.version = '0.1.3'
 
 # should the extension be launched at start-up?
 B.launchAtStartUp = True
@@ -81,9 +81,13 @@ with open(licensePath) as license:
 # expiration date for trial extensions
 B.expireDate = '2021-03-31'
 
+# copy README & imgs to extension docs
+shutil.copyfile(os.path.join(basePath, 'README.md'), os.path.join(htmlPath, 'index.md'))
+shutil.copy2(os.path.join(basePath, 'MM2SS.gif'), htmlPath)
+
 # compile and save the extension bundle
 print('building extension...', end=' ')
-B.save(extensionPath, libPath=libPath, htmlPath=htmlPath, resourcesPath=resourcesPath, pycOnly=["3.6", "3.7"])
+B.save(extensionPath, libPath=libPath, htmlPath=htmlPath, resourcesPath=resourcesPath, pycOnly=pycOnly)
 print('done!')
 
 # check for problems in the compiled extension
