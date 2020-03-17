@@ -45,7 +45,7 @@ B.developer = 'CJType'
 B.developerURL = 'http://github.com/cjdunn'
 
 # extension icon (file path or NSImage)
-imagePath = os.path.join(resourcesPath, 'html/MM2SpaceCenterMechanicIcon.png')
+imagePath = os.path.join(basePath, 'MM2SpaceCenterMechanicIcon.png')
 B.icon = imagePath
 
 # version of the extension
