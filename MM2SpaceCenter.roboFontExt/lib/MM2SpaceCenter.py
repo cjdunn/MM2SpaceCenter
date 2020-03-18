@@ -118,14 +118,7 @@ class MM2SpaceCenter:
         self.wordsForMMPair()        
         
 
-    # def getIntegerValue(self, field):
-    #     """Get an integer value (or if not set, the placeholder) from a field."""
-    #     try:
-    #         returnValue = int(field.get())
-    #     except ValueError:
-    #         returnValue = int(field.getPlaceholder())
-    #         field.set(returnValue)
-    #     return returnValue
+
 
 
     #from word-o-mat
@@ -266,7 +259,6 @@ class MM2SpaceCenter:
     def getPairstring(self, pair):
 
         left, self.leftEncoded = self.checkForUnencodedGname(self.font, pair[0])
-        
         right, self.rightEncoded = self.checkForUnencodedGname(self.font, pair[1])
             
         pairstring = left+right
@@ -274,15 +266,6 @@ class MM2SpaceCenter:
         return pairstring
 
 
-    def escapeSlashes2Pairstring(self, pair):
-
-        left, self.leftEncoded = self.checkForUnencodedGname(self.font, pair[0])
-        
-        right, self.rightEncoded = self.checkForUnencodedGname(self.font, pair[1])
-            
-        pairstring = left+right
-            
-        return pairstring
 
 
     #convert char gnames to chars to find words in dict
