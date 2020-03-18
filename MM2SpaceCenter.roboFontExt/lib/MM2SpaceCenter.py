@@ -390,8 +390,18 @@ class MM2SpaceCenter:
         textList = []
 
 
-        #convert MM tuple into search pair
-        pairstring = ''.join(self.pair2char(self.pair))
+        # try getting pairstring once in order to check if encoded
+        pairstring = self.getPairstring(self.pair)
+
+        #convert MM tuple into search pair to check uc, lc, mixed case. Maybe need a different var name here? 
+        pair2char = ''.join(self.pair2char(self.pair))
+        
+        
+        
+        
+        
+        #check Encoding
+        
         
         
 
@@ -400,16 +410,16 @@ class MM2SpaceCenter:
         #default value
         makeUpper = False
 
-        if pairstring.isupper():
+        if pair2char.isupper():
             #print (pairstring, 'upper')
             makeUpper = True
             #make lower for searching
-            searchString = pairstring.lower()
+            searchString = pair2char.lower()
 
         else:
             #print(pairstring, 'not upper')
             makeUpper = False
-            searchString = pairstring
+            searchString = pair2char
             pass
 
         #check for mixed case
@@ -484,41 +494,39 @@ class MM2SpaceCenter:
                 
                     break
         
-        
-        
-        
-        self.sorted = self.w.listOutput.get()
-        
-        #self.sorted = False
-        if self.sorted == True:
-            sortedText = self.sortWordsByWidth(textList)
-            #print ('sorted',sortedText)
-            #print ('textList', textList)
-            
-            textList = sortedText
-            
-            joinString = "\\n"            
-            text = joinString.join([str(word) for word in textList])
-
-        else:
-            text = ' '.join([str(word) for word in textList])
 
 
         if makeUpper == True:    
             #make text upper again
-            text = text.upper()
+            textList = list(  text.upper() for text in textList ) 
 
+        
+
+
+        if not len(textList) == 0:            
+            #see if box is checked
+            self.sorted = self.w.listOutput.get()
+        
+            #self.sorted = False
+            if self.sorted == True:
+                sortedText = self.sortWordsByWidth(textList)
+            
+                textList = sortedText
+            
+                joinString = "\\n"            
+                text = joinString.join([str(word) for word in textList])
+
+            else:
+                text = ' '.join([str(word) for word in textList])
 
 
                 
         # if no words are found, show spacing string and previous text
         if len(text) == 0:
 
-
+            #do i need to get pairstring again or can I used the previous one? 
             pairstring = self.getPairstring(self.pair)
 
-
-            
             previousText = '\\n no words for pair ' + pairstring
             
             self.messageText = '😞 no words found: '+ pairstring
