@@ -239,6 +239,12 @@ class MM2SpaceCenter:
 
 
 
+    # def gname2char(self, f, gname):
+    #     uni = f[gname].unicodes[0]
+    #     char = chr(uni)
+    #     return char
+
+
     def gname2char(self, f, gname):
         uni = f[gname].unicodes[0]
         char = chr(uni)
@@ -271,7 +277,39 @@ class MM2SpaceCenter:
         return pairstring
 
 
+    def checkForUnencodedGname(self, font, gname):
+        glyphIsEncoded = False
+        
+            
+        
+        if (not font[gname].unicodes) or (gname == 'slash'):
+            scString = '/'+gname+' '
+        else: 
+            scString = self.gname2char(font, gname)
+            glyphIsEncoded = True
+            
+        return(scString, glyphIsEncoded)
 
+
+
+    def escapeSlashes2Pairstring(self, pair):
+
+        #escapedPair = tuple( ('/slash ' if item=='slash' else item) for item in pair ) 
+        
+        escapedPair = pair
+        
+        left, self.leftEncoded = self.checkForUnencodedGname(self.font, escapedPair[0])
+        
+        
+        
+        right, self.rightEncoded = self.checkForUnencodedGname(self.font, escapedPair[1])
+            
+        # left =  escapedPair[0]               
+        # right =  escapedPair[1]
+                    
+        pairstring = left+right
+            
+        return pairstring
 
 
     #convert char gnames to chars to find words in dict
@@ -465,8 +503,17 @@ class MM2SpaceCenter:
         # if no words are found, show spacing string and previous text
         if len(text) == 0:
 
-
-            pairstring = self.checkPairForUnencodedGnames(self.font, self.pair)
+            #escape slash
+            if 'slash' in self.pair:
+                escapedPairstring = self.escapeSlashes2Pairstring(self.pair)
+                #print ('escapedPair', escapedPair)
+                #pairstring = self.checkPairForUnencodedGnames(self.font, escapedPair)
+                
+                pairstring = escapedPairstring
+                print ('pairstring', pairstring)
+                
+            else:
+                pairstring = self.checkPairForUnencodedGnames(self.font, self.pair)
 
             
             previousText = '\\n no words for pair ' + pairstring
@@ -488,6 +535,12 @@ class MM2SpaceCenter:
 
             else:
                 #self.setSpaceCenter(font, ' '+pairstring +' not found ' +self.lcString(pairstring)+ previousText)
+                
+                
+                #print ('pair', self.pair) #if 'slash' 
+
+                    
+                
 
                 self.setSpaceCenter(self.font, ' '+pairstring +' ' +self.lcString(pairstring)+ previousText)
 
