@@ -525,7 +525,7 @@ class MM2SpaceCenter:
         if len(text) == 0:
 
             #do i need to get pairstring again or can I used the previous one? 
-            pairstring = self.getPairstring(self.pair)
+            #pairstring = self.getPairstring(self.pair)
 
             previousText = '\\n no words for pair ' + pairstring
             
