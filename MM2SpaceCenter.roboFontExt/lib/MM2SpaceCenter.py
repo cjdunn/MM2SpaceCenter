@@ -243,9 +243,11 @@ class MM2SpaceCenter:
     def checkForUnencodedGname(self, font, gname):
         glyphIsEncoded = False
         
+        escapeList = ['slash', 'backslash']
+        
             
         
-        if (not font[gname].unicodes) or (gname == 'slash'):
+        if (not font[gname].unicodes) or (gname in escapeList):
             scString = '/'+gname+' '
         else: 
             scString = self.gname2char(font, gname)
