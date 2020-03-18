@@ -31,7 +31,7 @@ class MM2SpaceCenter:
     def __init__(self, wordlistPath):
         self.font = metricsMachine.CurrentFont()
         self.pair = metricsMachine.GetCurrentPair()
-        self.wordlistPath = wordlistPath
+        #self.wordlistPath = wordlistPath
         
         leftMargin = 10
         topMargin = 10
@@ -311,8 +311,8 @@ class MM2SpaceCenter:
         
         #read default from wordlistPath
 
-        fo = codecs.open(self.wordlistPath, mode="r", encoding="utf-8")
-        wordsAll = fo.read().splitlines()
+        #fo = codecs.open(self.wordlistPath, mode="r", encoding="utf-8")
+        #wordsAll = fo.read().splitlines()
         
         
         # use custom from dropdown ### not working
@@ -320,11 +320,11 @@ class MM2SpaceCenter:
 
 
         # temp comment out ###
-        contentLimit  = '*****'
-        contentStart = wordsAll.index(contentLimit) + 1
-        wordsAll = wordsAll[contentStart:]
+        # contentLimit  = '*****'
+        # contentStart = wordsAll.index(contentLimit) + 1
+        # wordsAll = wordsAll[contentStart:]
 
-        fo.close()
+        # fo.close()
 
 
         
