@@ -146,6 +146,8 @@ class MM2SpaceCenter:
 
         self.textfiles = ['catalan', 'czech', 'danish', 'dutch', 'ukacd', 'finnish', 'french', 'german', 'hungarian', 'icelandic', 'italian', 'latin', 'norwegian', 'polish', 'slovak', 'spanish', 'vietnamese']
         self.languageNames = ['Catalan', 'Czech', 'Danish', 'Dutch', 'English', 'Finnish', 'French', 'German', 'Hungarian', 'Icelandic', 'Italian', 'Latin', 'Norwegian', 'Polish', 'Slovak', 'Spanish', 'Vietnamese syllables']
+
+
         #self.source = getExtensionDefault("com.cjtype.MM2SpaceCenter.source", 4)
 
         bundle = ExtensionBundle("MM2SpaceCenter")
@@ -369,6 +371,7 @@ class MM2SpaceCenter:
 
         
         ### temp comment out to check speed
+        self.source = self.w.source.get()
         wordsAll = self.dictWords[self.textfiles[self.source]] 
         
         #default values are hard coded for now
@@ -561,7 +564,7 @@ class MM2SpaceCenter:
 
 
 
-def run(wordlistPath_rel):
+def run():
     if not len(AllFonts()) > 0:
         print ('you must have a font open')
         return
@@ -578,16 +581,23 @@ def run(wordlistPath_rel):
     p = metricsMachine.GetCurrentPair()
     
     font = metricsMachine.CurrentFont()
+    
+    
+    wordlistPath_rel = 'resources/ukacd.txt'
+
+    #wordlistPath_abs = None
+    
+    if wordlistPath_rel:
+        pathname = os.path.dirname(sys.argv[0])        
+        cwd = os.path.abspath(pathname)
+        wordlistPath_abs = os.path.join(cwd ,wordlistPath_rel)
+        
+        p = MM2SpaceCenter(wordlistPath=wordlistPath_abs) 
 
 
-  
-    pathname = os.path.dirname(sys.argv[0])        
-    cwd = os.path.abspath(pathname)
-    wordlistPath_abs = os.path.join(cwd ,wordlistPath_rel)
-
-
-
-    p = MM2SpaceCenter(wordlistPath= wordlistPath_abs)    
+    else:    
+        p = MM2SpaceCenter()    
+    #p = MM2SpaceCenter()    
             
 
 
@@ -596,9 +606,12 @@ def run(wordlistPath_rel):
 
 
 ## set path to word list
-wordlistPath_rel = 'resources/ukacd.txt'
+
 #wordlistPath_rel = 'resources/german.txt'
-run(wordlistPath_rel)
+
+#run(wordlistPath_rel)
+
+run()
         
 # to do:       
 # make sure space center "show kerning" is set to on
