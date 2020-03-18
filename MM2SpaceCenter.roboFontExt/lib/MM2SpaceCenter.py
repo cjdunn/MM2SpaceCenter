@@ -28,7 +28,7 @@ class MM2SpaceCenter:
         removeObserver(self, "MetricsMachine.currentPairChanged")
         print ('MM2SpaceCenter deactivated')
 
-    def __init__(self, wordlistPath):
+    def __init__(self, ):
         self.font = metricsMachine.CurrentFont()
         self.pair = metricsMachine.GetCurrentPair()
         #self.wordlistPath = wordlistPath
@@ -582,40 +582,34 @@ def run():
     
     font = metricsMachine.CurrentFont()
     
-    
-    wordlistPath_rel = 'resources/ukacd.txt'
+    ## old support for custom word path, add back later via UI? 
+    # wordlistPath_rel = 'resources/ukacd.txt'
 
-    #wordlistPath_abs = None
+    # #wordlistPath_abs = None
     
-    if wordlistPath_rel:
-        pathname = os.path.dirname(sys.argv[0])        
-        cwd = os.path.abspath(pathname)
-        wordlistPath_abs = os.path.join(cwd ,wordlistPath_rel)
+    # if wordlistPath_rel:
+    #     pathname = os.path.dirname(sys.argv[0])        
+    #     cwd = os.path.abspath(pathname)
+    #     wordlistPath_abs = os.path.join(cwd ,wordlistPath_rel)
         
-        p = MM2SpaceCenter(wordlistPath=wordlistPath_abs) 
+    #     p = MM2SpaceCenter(wordlistPath=wordlistPath_abs) 
 
 
-    else:    
-        p = MM2SpaceCenter()    
-    #p = MM2SpaceCenter()    
+    # else:    
+    #     p = MM2SpaceCenter()    
+    p = MM2SpaceCenter()    
             
 
 
 
-   
+  
 
-
-## set path to word list
-
-#wordlistPath_rel = 'resources/german.txt'
-
-#run(wordlistPath_rel)
 
 run()
         
 # to do:       
 # make sure space center "show kerning" is set to on
-# add ability to change word lenght and number of words ? 
+# add ability to change word lenght 
 
 
 
