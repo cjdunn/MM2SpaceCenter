@@ -41,6 +41,7 @@ class MM2SpaceCenter:
         yPos += topMargin
         
         
+        
         self.wordCount = 20
         self.minLength = 3
         self.maxLength = 15
@@ -88,6 +89,11 @@ class MM2SpaceCenter:
         
         self.w.source = PopUpButton((leftMargin, yPos, 85, 20), [], sizeStyle="small", callback=self.changeSourceCallback)
         self.w.source.setItems(languageOptions)
+        
+        self.w.source.set(4) #default to English for now
+        self.source = None 
+        self.source = self.w.source.get() #get value, to use for other functions
+
 
         yPos += lineHeight
 
@@ -315,7 +321,7 @@ class MM2SpaceCenter:
 
 
         
-        print ('self.wordCount', self.wordCount)
+        #print ('self.wordCount', self.wordCount)
         
         #currently allows any word lenght, this could be customized later
 
