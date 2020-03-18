@@ -33,25 +33,86 @@ class MM2SpaceCenter:
         self.pair = metricsMachine.GetCurrentPair()
         self.wordlistPath = wordlistPath
         
+        leftMargin = 10
+        topMargin = 10
+        yPos = 0 
+        lineHeight = 20
+        
+        yPos += topMargin
+        
+        
+        self.wordCount = 20
+        self.minLength = 3
+        self.maxLength = 15
+        
         self.activateModule()
         self.w = Window((250, 100), "MM2SpaceCenter")
         
-        self.w.myTextBox = TextBox((10, 10, -10, 17), "MM2SpaceCenter activated 😎", sizeStyle="regular") 
+        self.w.myTextBox = TextBox((leftMargin, yPos, -10, 17), "MM2SpaceCenter activated 😎", sizeStyle="regular") 
         
+        yPos += lineHeight 
+
         
+        topLineFields = {
+            "wordCount": [0+leftMargin,   self.wordCount, 20],
+            #"minLength": [108+leftMargin, self.minLength, 3],
+            #"maxLength": [145+leftMargin, self.maxLength, 10],
+        }
+        topLineLabels = {
+            "wcText": [31+leftMargin, 78, 'words', 'left'],
+
+            #"wcText": [31+leftMargin, 78, 'words with', 'left'],
+
+           # "lenTextTwo": [133+leftMargin, 10, u'–', 'center'],
+            #"lenTextThree": [176+leftMargin, -0, 'letters', 'left'],
+        }        
+
+        # for label, values in topLineFields.items():
+        #     setattr(self.w, label, EditText((values[0], 0+yPos, 28, 22), text=values[1], placeholder=str(values[2])))
+
+        self.w.wordCount = EditText( (0+leftMargin, 0+yPos, 28, 22), text=self.wordCount, placeholder=self.wordCount, callback=self.wordCountCallback) 
+        
+
+        for label, values in topLineLabels.items():
+            setattr(self.w, label, TextBox((values[0], 3+yPos, values[1], 22), text=values[2], alignment=values[3]))
+
+        
+        yPos += lineHeight * 1.5
         
         self.loadDictionaries()
         
         # language selection
         languageOptions = list(self.languageNames)
-        self.w.source = PopUpButton((10, 32, 85, 20), [], sizeStyle="small", callback=self.changeSourceCallback)
-        #print (languageOptions)
+        
+        
+        
+        self.w.source = PopUpButton((leftMargin, yPos, 85, 20), [], sizeStyle="small", callback=self.changeSourceCallback)
         self.w.source.setItems(languageOptions)
+
+        yPos += lineHeight
+
+
         
         self.w.bind("close", self.deactivateModule)
         self.w.open()
         
 
+    def wordCountCallback(self,sender):
+        #print ('old', self.wordCount)
+
+        self.wordCount = self.w.wordCount.get()
+        #print ('new', self.wordCount)
+        
+        
+
+    def getIntegerValue(self, field):
+        """Get an integer value (or if not set, the placeholder) from a field."""
+        try:
+            returnValue = int(field.get())
+        except ValueError:
+            returnValue = int(field.getPlaceholder())
+            field.set(returnValue)
+        return returnValue
 
 
     #from word-o-mat
@@ -88,6 +149,8 @@ class MM2SpaceCenter:
         with open('/usr/share/dict/words', 'r') as userFile:
             lines = userFile.read()
         self.dictWords["user"] = lines.splitlines()
+        
+        #print ('load dicts')
 
 
 
@@ -109,6 +172,10 @@ class MM2SpaceCenter:
                 for line in lines.splitlines():
                     w = line.strip() # strip whitespace from beginning/end
                     self.customWords.append(w)
+                    
+        self.source = self.w.source.get()
+        
+        #print ('source changed')
 
 
 
@@ -220,25 +287,35 @@ class MM2SpaceCenter:
         # use custom from dropdown ### not working
         
 
+
+        # temp comment out ###
         contentLimit  = '*****'
         contentStart = wordsAll.index(contentLimit) + 1
         wordsAll = wordsAll[contentStart:]
 
         fo.close()
 
-        self.source = self.w.source.get()
-        
-        #print (self.source)
+
         
         #print (self.languageNames[self.source] )
         
         #wordsAll = self.dictWords['german']
         
-        
+        ### temp comment out to check speed
         wordsAll = self.dictWords[self.textfiles[self.source]] 
         
         #default values are hard coded for now
-        maxWordCount = 20
+       #self.wordCount = self.getIntegerValue(self.w.wordCount)
+
+        #v = self.getIntegerValue(self.w.wordCount)
+        
+        wordCountValue = int(self.wordCount) 
+        
+        #print(v)
+
+
+        
+        print ('self.wordCount', self.wordCount)
         
         #currently allows any word lenght, this could be customized later
 
@@ -283,7 +360,7 @@ class MM2SpaceCenter:
                 count +=1
         
             #stop when you get enough results
-            if count > maxWordCount:
+            if count >= wordCountValue:
                 #print (text)
         
                 if makeUpper == True:
