@@ -33,8 +33,11 @@ class MM2SpaceCenter:
         self.pair = metricsMachine.GetCurrentPair()
         #self.wordlistPath = wordlistPath
         
+        
+        
+        
         leftMargin = 10
-        topMargin = 10
+        topMargin = 5
         yPos = 0 
         lineHeight = 20
         
@@ -50,14 +53,14 @@ class MM2SpaceCenter:
         self.maxLength = 15
         
         self.activateModule()
-        self.w = Window((250, 100), "MM2SpaceCenter")
+        self.w = Window((250, 120), "MM2SpaceCenter")
         
         self.w.myTextBox = TextBox((leftMargin, yPos, -10, 17), self.messageText, sizeStyle="regular") 
 
 
 
         
-        yPos += (lineHeight * 1.5) 
+        yPos += (lineHeight * 1.2) 
 
         
         topLineFields = {
@@ -101,12 +104,25 @@ class MM2SpaceCenter:
         self.source = self.w.source.get() #get value, to use for other functions
 
 
-        yPos += lineHeight
+        yPos += lineHeight * 1.2
+        
+        checkBoxSize = 18
+        self.w.listOutput = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
+        self.w.listLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Output as list sorted by width", sizeStyle="small")
+        
+        self.sorted = self.w.listOutput.get()
 
 
         
         self.w.bind("close", self.deactivateModule)
         self.w.open()
+        
+
+
+    def sortedCallback(self, sender):
+        self.sorted = self.w.listOutput.get()
+        self.wordsForMMPair()  
+        
         
 
     def wordCountCallback(self,sender):
@@ -186,6 +202,55 @@ class MM2SpaceCenter:
         
         #print ('source changed')
 
+
+    def sortWordsByWidth(self, wordlist):
+        """Sort output word list by width."""
+        f = self.font
+        wordWidths = []
+
+        for word in wordlist:
+            unitCount = 0
+            for char in word:
+                try:
+                    glyphWidth = f[char].width
+                except:
+                    try:
+                        gname = self.glyphNamesForValues[char]
+                        glyphWidth = f[gname].width
+                    except:
+                        glyphWidth = 0
+                unitCount += glyphWidth
+            # add kerning
+            for i in range(len(word)-1):
+                pair = list(word[i:i+2])
+                unitCount += int(self.findKerning(pair))
+            wordWidths.append(unitCount)
+
+        wordWidths_sorted, wordlist_sorted = zip(*sorted(zip(wordWidths, wordlist))) # thanks, stackoverflow
+        return wordlist_sorted
+
+
+
+    def findKerning(self, chars):
+        """Helper function to find kerning between two given glyphs.
+        This assumes MetricsMachine style group names."""
+
+        markers = ["@MMK_L_", "@MMK_R_"]
+        keys = [c for c in chars]
+
+        for i in range(2):
+            allGroups = self.font.groups.findGlyph(chars[i])
+            if len(allGroups) > 0:
+                for g in allGroups:
+                    if markers[i] in g:
+                        keys[i] = g
+                        continue
+
+        key = (keys[0], keys[1])
+        if self.font.kerning.has_key(key):
+            return self.font.kerning[key]
+        else:
+            return 0
 
 
 
@@ -301,32 +366,7 @@ class MM2SpaceCenter:
         
         self.mixedCase = False
 
-        #read wordlist file
-        #import codecs
-        
-        
-        #read default from wordlistPath
 
-        #fo = codecs.open(self.wordlistPath, mode="r", encoding="utf-8")
-        #wordsAll = fo.read().splitlines()
-        
-        
-        # use custom from dropdown ### not working
-        
-
-
-        # temp comment out ###
-        # contentLimit  = '*****'
-        # contentStart = wordsAll.index(contentLimit) + 1
-        # wordsAll = wordsAll[contentStart:]
-
-        # fo.close()
-
-
-        
-        #print (self.languageNames[self.source] )
-        
-        #wordsAll = self.dictWords['german']
         
         ### temp comment out to check speed
         wordsAll = self.dictWords[self.textfiles[self.source]] 
@@ -402,7 +442,7 @@ class MM2SpaceCenter:
                     if not word in textList:
                 
                         #print (word)
-                        textList += word +' '
+                        textList.append(word)
                         count +=1
                         
                 #then try capitalizing lowercase words
@@ -412,7 +452,7 @@ class MM2SpaceCenter:
                     if not word in textList:
                 
                         #print (word)
-                        textList += word +' '
+                        textList.append(word)
                         count +=1
         
                 #stop when you get enough results
@@ -435,7 +475,7 @@ class MM2SpaceCenter:
                     if not word in textList:
                 
                         #print (word)
-                        textList += word +' '
+                        textList.append(word)
                         count +=1
         
                 #stop when you get enough results
@@ -443,15 +483,30 @@ class MM2SpaceCenter:
                     #print (text)
                 
                     break
+        
+        
+        
+        
+        self.sorted = self.w.listOutput.get()
+        
+        #self.sorted = False
+        if self.sorted == True:
+            sortedText = self.sortWordsByWidth(textList)
+            #print ('sorted',sortedText)
+            #print ('textList', textList)
+            
+            textList = sortedText
+            
+            joinString = "\\n"            
+            text = joinString.join([str(word) for word in textList])
 
-        text = ''.join([str(word) for word in textList])
+        else:
+            text = ' '.join([str(word) for word in textList])
 
 
-        if makeUpper == True:
-    
+        if makeUpper == True:    
             #make text upper again
             text = text.upper()
-            #print ('text', text)  
 
 
 
@@ -469,26 +524,12 @@ class MM2SpaceCenter:
             self.messageText = '😞 no words found: '+ pairstring
             self.w.myTextBox.set(self.messageText) 
             
-
-            
-            
-
           
             
             if makeUpper == True:
-                #not sure if I still need space before pairstring, was originally there to deal with / but since using setRaw this isn't an issue
-                #self.setSpaceCenter(font, ' '+pairstring +' not found '+self.ucString(pairstring)+ previousText)
-
                 self.setSpaceCenter(self.font, ' '+pairstring +' '+self.ucString(pairstring)+ previousText)
 
             else:
-                #self.setSpaceCenter(font, ' '+pairstring +' not found ' +self.lcString(pairstring)+ previousText)
-                
-                
-                #print ('pair', self.pair) #if 'slash' 
-
-                    
-                
 
                 self.setSpaceCenter(self.font, ' '+pairstring +' ' +self.lcString(pairstring)+ previousText)
 
