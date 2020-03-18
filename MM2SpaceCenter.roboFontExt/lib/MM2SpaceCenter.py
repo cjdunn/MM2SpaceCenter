@@ -40,7 +40,10 @@ class MM2SpaceCenter:
         
         yPos += topMargin
         
-        
+        self.messageText = 'MM2SpaceCenter activated 😎'
+
+
+
         
         self.wordCount = 20
         self.minLength = 3
@@ -49,9 +52,12 @@ class MM2SpaceCenter:
         self.activateModule()
         self.w = Window((250, 100), "MM2SpaceCenter")
         
-        self.w.myTextBox = TextBox((leftMargin, yPos, -10, 17), "MM2SpaceCenter activated 😎", sizeStyle="regular") 
+        self.w.myTextBox = TextBox((leftMargin, yPos, -10, 17), self.messageText, sizeStyle="regular") 
+
+
+
         
-        yPos += lineHeight 
+        yPos += (lineHeight * 1.5) 
 
         
         topLineFields = {
@@ -343,13 +349,13 @@ class MM2SpaceCenter:
         makeUpper = False
 
         if pairstring.isupper():
-            #print ('upper')
+            #print (pairstring, 'upper')
             makeUpper = True
             #make lower for searching
             searchString = pairstring.lower()
 
         else:
-            #print('not upper')
+            #print(pairstring, 'not upper')
             makeUpper = False
             searchString = pairstring
             pass
@@ -372,15 +378,17 @@ class MM2SpaceCenter:
             #stop when you get enough results
             if count >= wordCountValue:
                 #print (text)
-        
-                if makeUpper == True:
-            
-                    #make text upper again
-                    text = text.upper()
-                    #print (text)        
-        
                 
                 break
+
+        if makeUpper == True:
+    
+            #make text upper again
+            text = text.upper()
+            #print ('text', text)  
+
+
+
                 
         # if no words are found, show spacing string and previous text
         if len(text) == 0:
@@ -390,6 +398,10 @@ class MM2SpaceCenter:
 
             
             previousText = '\\n no words for pair ' + pairstring
+            
+            self.messageText = '😞 no words found: '+ pairstring
+            self.w.myTextBox.set(self.messageText) 
+            
             #print ('*😞* no words found for', pairstring,  self.pair)
 
             # #if either glyph is unencoded, use gname           
@@ -426,6 +438,10 @@ class MM2SpaceCenter:
             #set space center if words are found
             #not sure why there's always a /slash in from of the first word, added ' '+ to avoid losing the first word
             self.setSpaceCenter(self.font, text)
+            
+            self.messageText = '😎 words found: '+ pairstring
+            self.w.myTextBox.set(self.messageText)
+            
 
 
 
