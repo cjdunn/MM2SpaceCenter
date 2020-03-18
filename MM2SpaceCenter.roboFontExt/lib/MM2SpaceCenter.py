@@ -53,7 +53,7 @@ class MM2SpaceCenter:
         self.maxLength = 15
         
         self.activateModule()
-        self.w = Window((250, 120), "MM2SpaceCenter")
+        self.w = Window((250, 100), "MM2SpaceCenter")
         
         self.w.myTextBox = TextBox((leftMargin, yPos, -10, 17), self.messageText, sizeStyle="regular") 
 
@@ -87,7 +87,7 @@ class MM2SpaceCenter:
             setattr(self.w, label, TextBox((values[0], 3+yPos, values[1], 22), text=values[2], alignment=values[3]))
 
         
-        yPos += lineHeight * 1.5
+        yPos += lineHeight * 1.3
         
         self.loadDictionaries()
         
