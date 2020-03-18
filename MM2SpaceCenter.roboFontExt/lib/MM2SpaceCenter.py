@@ -238,43 +238,13 @@ class MM2SpaceCenter:
         return iter(shuffled)
 
 
-
-    # def gname2char(self, f, gname):
-    #     uni = f[gname].unicodes[0]
-    #     char = chr(uni)
-    #     return char
-
-
     def gname2char(self, f, gname):
         uni = f[gname].unicodes[0]
         char = chr(uni)
         return char
 
 
-    def checkPairForUnencodedGnames(self, font, pair):
-        #if either glyph is unencoded, use gname           
-        left =  self.pair[0]               
-        right =  self.pair[1]
-        
-        self.leftEncoded = False
-        self.rightEncoded = False
-                     
-        if not font[left].unicodes:
-            left = '/'+left+' '
-        else: 
-            left = self.gname2char(font, left)
-            self.leftEncoded = True
-            
-        if not font[right].unicodes:
-            right = '/'+right+' '
-        else: 
-            right = self.gname2char(font, right)
-            self.rightEncoded = True
-            
-        pairstring = left+right
 
-                
-        return pairstring
 
 
     def checkForUnencodedGname(self, font, gname):
@@ -420,9 +390,7 @@ class MM2SpaceCenter:
         #check for mixed case
         if self.pair2char(self.pair)[0].isupper():
             if self.pair2char(self.pair)[1].islower():
-                self.checkPairForUnencodedGnames(self.font, self.pair)
                 if (self.leftEncoded == True) and (self.rightEncoded == True) : 
-                    #print ('mixed case', pairstring)
                     self.mixedCase = True
 
 
@@ -506,18 +474,8 @@ class MM2SpaceCenter:
         # if no words are found, show spacing string and previous text
         if len(text) == 0:
 
-            #escape slash
-            if 'slash' in self.pair:
-                pairstring = self.escapeSlashes2Pairstring(self.pair)
-                #print ('escapedPair', escapedPair)
-                #pairstring = self.checkPairForUnencodedGnames(self.font, escapedPair)
-                
-                print ('pairstring', pairstring)
-                
-            else:
-                #pairstring = self.checkPairForUnencodedGnames(self.font, self.pair)
 
-                pairstring = self.getPairstring(self.pair)
+            pairstring = self.getPairstring(self.pair)
 
 
             
