@@ -112,20 +112,20 @@ class MM2SpaceCenter:
     def wordCountCallback(self,sender):
         #print ('old', self.wordCount)
 
-        self.wordCount = self.w.wordCount.get()
+        self.wordCount = self.w.wordCount.get() or 1
         
         #update space center
         self.wordsForMMPair()        
         
 
-    def getIntegerValue(self, field):
-        """Get an integer value (or if not set, the placeholder) from a field."""
-        try:
-            returnValue = int(field.get())
-        except ValueError:
-            returnValue = int(field.getPlaceholder())
-            field.set(returnValue)
-        return returnValue
+    # def getIntegerValue(self, field):
+    #     """Get an integer value (or if not set, the placeholder) from a field."""
+    #     try:
+    #         returnValue = int(field.get())
+    #     except ValueError:
+    #         returnValue = int(field.getPlaceholder())
+    #         field.set(returnValue)
+    #     return returnValue
 
 
     #from word-o-mat
@@ -248,18 +248,30 @@ class MM2SpaceCenter:
     def checkPairForUnencodedGnames(self, font, pair):
         #if either glyph is unencoded, use gname           
         left =  self.pair[0]               
-        right =  self.pair[1]             
+        right =  self.pair[1]
+        
+        self.leftEncoded = False
+        self.rightEncoded = False
+                     
         if not font[left].unicodes:
             left = '/'+left+' '
         else: 
             left = self.gname2char(font, left)
+            self.leftEncoded = True
+            
         if not font[right].unicodes:
             right = '/'+right+' '
         else: 
             right = self.gname2char(font, right)
+            self.rightEncoded = True
+            
         pairstring = left+right
-        
+
+                
         return pairstring
+
+
+
 
 
     #convert char gnames to chars to find words in dict
@@ -289,6 +301,9 @@ class MM2SpaceCenter:
         return string
 
     def wordsForMMPair(self, ):
+        
+        
+        self.mixedCase = False
 
         #read wordlist file
         #import codecs
@@ -336,6 +351,7 @@ class MM2SpaceCenter:
         #currently allows any word lenght, this could be customized later
 
         text = ''
+        textList = []
 
 
         #convert MM tuple into search pair
@@ -359,6 +375,16 @@ class MM2SpaceCenter:
             makeUpper = False
             searchString = pairstring
             pass
+
+        #check for mixed case
+        if self.pair2char(self.pair)[0].isupper():
+            if self.pair2char(self.pair)[1].islower():
+                self.checkPairForUnencodedGnames(self.font, self.pair)
+                if (self.leftEncoded == True) and (self.rightEncoded == True) : 
+                    #print ('mixed case', pairstring)
+                    self.mixedCase = True
+
+
     
         try:
             currentSC = CurrentSpaceCenter()
@@ -369,17 +395,63 @@ class MM2SpaceCenter:
 
         
         count = 0 
-        for word in self.randomly(wordsAll):
-            if searchString in word:
-                #print (word)
-                text += word +' '
-                count +=1
         
-            #stop when you get enough results
-            if count >= wordCountValue:
-                #print (text)
+        #self.usePhrases = False 
+        
+        # more results for mixed case if we include lc words and capitalize
+        if self.mixedCase == True:
+            for word in self.randomly(wordsAll):
+
+                # first look for words that are already mixed case
+                if searchString in word:              
+                    #avoid duplicates
+                    if not word in textList:
                 
-                break
+                        #print (word)
+                        textList += word +' '
+                        count +=1
+                        
+                #then try capitalizing lowercase words
+                if (searchString.lower() in word[:2]):
+                    word = word.capitalize()               
+                    #avoid duplicates
+                    if not word in textList:
+                
+                        #print (word)
+                        textList += word +' '
+                        count +=1
+        
+                #stop when you get enough results
+                if count >= wordCountValue:
+                    #print (text)
+                
+                    break
+                    
+            pass            
+        
+        
+        
+        
+        
+        else:
+            for word in self.randomly(wordsAll):
+                if searchString in word:
+                
+                    #avoid duplicates
+                    if not word in textList:
+                
+                        #print (word)
+                        textList += word +' '
+                        count +=1
+        
+                #stop when you get enough results
+                if count >= wordCountValue:
+                    #print (text)
+                
+                    break
+
+        text = ''.join([str(word) for word in textList])
+
 
         if makeUpper == True:
     
@@ -402,20 +474,7 @@ class MM2SpaceCenter:
             self.messageText = '😞 no words found: '+ pairstring
             self.w.myTextBox.set(self.messageText) 
             
-            #print ('*😞* no words found for', pairstring,  self.pair)
 
-            # #if either glyph is unencoded, use gname           
-            # left =  self.pair[0]               
-            # right =  self.pair[1]             
-            # if not font[left].unicodes:
-            #     left = '/'+left+' '
-            # else: 
-            #     left = self.gname2char(font, left)
-            # if not font[right].unicodes:
-            #     right = '/'+right+' '
-            # else: 
-            #     right = self.gname2char(font, right)
-            # pairstring = left+right
             
             
 
