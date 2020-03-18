@@ -292,21 +292,24 @@ class MM2SpaceCenter:
 
 
 
+
+    def getPairstring(self, pair):
+
+        left, self.leftEncoded = self.checkForUnencodedGname(self.font, pair[0])
+        
+        right, self.rightEncoded = self.checkForUnencodedGname(self.font, pair[1])
+            
+        pairstring = left+right
+            
+        return pairstring
+
+
     def escapeSlashes2Pairstring(self, pair):
 
-        #escapedPair = tuple( ('/slash ' if item=='slash' else item) for item in pair ) 
+        left, self.leftEncoded = self.checkForUnencodedGname(self.font, pair[0])
         
-        escapedPair = pair
-        
-        left, self.leftEncoded = self.checkForUnencodedGname(self.font, escapedPair[0])
-        
-        
-        
-        right, self.rightEncoded = self.checkForUnencodedGname(self.font, escapedPair[1])
+        right, self.rightEncoded = self.checkForUnencodedGname(self.font, pair[1])
             
-        # left =  escapedPair[0]               
-        # right =  escapedPair[1]
-                    
         pairstring = left+right
             
         return pairstring
@@ -505,15 +508,17 @@ class MM2SpaceCenter:
 
             #escape slash
             if 'slash' in self.pair:
-                escapedPairstring = self.escapeSlashes2Pairstring(self.pair)
+                pairstring = self.escapeSlashes2Pairstring(self.pair)
                 #print ('escapedPair', escapedPair)
                 #pairstring = self.checkPairForUnencodedGnames(self.font, escapedPair)
                 
-                pairstring = escapedPairstring
                 print ('pairstring', pairstring)
                 
             else:
-                pairstring = self.checkPairForUnencodedGnames(self.font, self.pair)
+                #pairstring = self.checkPairForUnencodedGnames(self.font, self.pair)
+
+                pairstring = self.getPairstring(self.pair)
+
 
             
             previousText = '\\n no words for pair ' + pairstring
