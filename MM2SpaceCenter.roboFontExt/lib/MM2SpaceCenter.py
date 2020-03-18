@@ -107,8 +107,9 @@ class MM2SpaceCenter:
         #print ('old', self.wordCount)
 
         self.wordCount = self.w.wordCount.get()
-        #print ('new', self.wordCount)
         
+        #update space center
+        self.wordsForMMPair()        
         
 
     def getIntegerValue(self, field):
@@ -180,6 +181,9 @@ class MM2SpaceCenter:
                     self.customWords.append(w)
                     
         self.source = self.w.source.get()
+        
+        #update space center
+        self.wordsForMMPair()
         
         #print ('source changed')
 
