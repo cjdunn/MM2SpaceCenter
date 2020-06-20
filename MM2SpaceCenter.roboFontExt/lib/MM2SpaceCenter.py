@@ -363,6 +363,13 @@ class MM2SpaceCenter:
         string = 'HOH'+pairstring+'HOHO'+pairstring+'OO'
         return string
 
+    # make mirrored pair to judge symmetry of kerns
+    def pairMirrored(self, pair):
+        left, self.leftEncoded = self.checkForUnencodedGname(self.font, pair[0])
+        right, self.rightEncoded = self.checkForUnencodedGname(self.font, pair[1])
+        return left + right + left
+
+
     def wordsForMMPair(self, ):
         
         
@@ -391,7 +398,6 @@ class MM2SpaceCenter:
 
         text = ''
         textList = []
-
 
         # try getting pairstring once in order to check if encoded
         pairstring = self.getPairstring(self.pair)
@@ -503,7 +509,7 @@ class MM2SpaceCenter:
             #make text upper again
             textList = list(  text.upper() for text in textList ) 
 
-        
+
 
 
         if not len(textList) == 0:            
@@ -535,25 +541,23 @@ class MM2SpaceCenter:
             self.messageText = '😞 no words found: '+ pairstring
             self.w.myTextBox.set(self.messageText) 
             
-          
-            
             if makeUpper == True:
-                self.setSpaceCenter(self.font, ' '+pairstring +' '+self.ucString(pairstring)+ previousText)
+                self.setSpaceCenter(self.font, ' '+ self.pairMirrored(self.pair) + ' '+ self.ucString(pairstring)+ previousText)
 
             else:
 
-                self.setSpaceCenter(self.font, ' '+pairstring +' ' +self.lcString(pairstring)+ previousText)
+                self.setSpaceCenter(self.font, ' '+ self.pairMirrored(self.pair) + ' ' + self.lcString(pairstring)+ previousText)
 
 
         
         else:
             #set space center if words are found
             #not sure why there's always a /slash in from of the first word, added ' '+ to avoid losing the first word
-            self.setSpaceCenter(self.font, text)
+            self.setSpaceCenter(self.font, self.pairMirrored(self.pair) + ' ' + text)
             
             self.messageText = '😎 words found: '+ pairstring
             self.w.myTextBox.set(self.messageText)
-            
+
 
 
 
