@@ -118,7 +118,7 @@ class MM2SpaceCenter:
         
         self.sorted = self.w.listOutput.get()
 
-        self.w.mirroredPair.set(True)
+        self.w.mirroredPair.set(False)
 
 
         
@@ -536,8 +536,13 @@ class MM2SpaceCenter:
                 joinString = "\\n"            
                 text = joinString.join([str(word) for word in textList])
 
+                if self.w.mirroredPair.get() == True:  #if "start with mirrored pair" is checked, add this to text
+                    text = self.pairMirrored(self.pair) + joinString + text 
+
             else:
                 text = ' '.join([str(word) for word in textList])
+                if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
+                    text = self.pairMirrored(self.pair) +' '+ text 
 
 
                 
@@ -553,19 +558,33 @@ class MM2SpaceCenter:
             self.w.myTextBox.set(self.messageText) 
             
             if makeUpper == True:
-                self.setSpaceCenter(self.font, ' '+ self.pairMirrored(self.pair) + ' '+ self.ucString(pairstring)+ previousText)
+                text = self.ucString(pairstring)+ previousText
+                if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
+                    
+                    text = self.pairMirrored(self.pair) + ' ' + text 
+
+
 
             else:
+                text = self.lcString(pairstring)+ previousText
+                if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
+                    text = self.pairMirrored(self.pair) + ' ' + text 
 
-                self.setSpaceCenter(self.font, ' '+ self.pairMirrored(self.pair) + ' ' + self.lcString(pairstring)+ previousText)
+            
+
+            text = text.lstrip() #remove whitespace  
+            self.setSpaceCenter(self.font, text)
 
 
         
         else:
             #set space center if words are found
             #not sure why there's always a /slash in from of the first word, added ' '+ to avoid losing the first word
-            self.setSpaceCenter(self.font, self.pairMirrored(self.pair) + ' ' + text)
             
+            text = text.lstrip() #remove whitespace             
+
+            self.setSpaceCenter(self.font, text)
+
             self.messageText = '😎 words found: '+ pairstring
             self.w.myTextBox.set(self.messageText)
 
