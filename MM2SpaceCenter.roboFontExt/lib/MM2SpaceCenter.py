@@ -53,7 +53,7 @@ class MM2SpaceCenter:
         self.maxLength = 15
         
         self.activateModule()
-        self.w = Window((250, 130), "MM2SpaceCenter")
+        self.w = Window((250, 155), "MM2SpaceCenter")
         
         self.w.myTextBox = TextBox((leftMargin, yPos, -10, 17), self.messageText, sizeStyle="regular") 
 
@@ -115,10 +115,14 @@ class MM2SpaceCenter:
         checkBoxSize = 18
         self.w.mirroredPair = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
         self.w.mirroredPairLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Start with mirrored pair (LRL)", sizeStyle="small")
+
+        yPos += lineHeight * 1.2
+        
+        checkBoxSize = 18
+        self.w.openCloseContext = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
+        self.w.openCloseContextLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Show open+close context {n}", sizeStyle="small")
         
         self.sorted = self.w.listOutput.get()
-
-        self.w.mirroredPair.set(True)
 
 
         
@@ -371,6 +375,36 @@ class MM2SpaceCenter:
         string = 'HOH'+pairstring+'HOHO'+pairstring+'OO'
         return string
 
+    openClosePairs = {
+        "‘": "’",
+        "“": "”",
+        "(": ")",
+        "[": "]",
+        "{": "}",
+        "‹": "›",
+        "«": "»",
+        "¡": "!",
+        "¿": "?",
+    }
+
+    def openCloseContext(self, pair):
+        if self.w.openCloseContext.get() == True:
+            left, self.leftEncoded = self.checkForUnencodedGname(self.font, pair[0])
+            right, self.rightEncoded = self.checkForUnencodedGname(self.font, pair[1])
+
+            for openClose in self.openClosePairs.items():
+                if openClose[0] == left and openClose[1] == right:
+                    return left + right
+                elif openClose[0] == left:
+                    return left + right + self.openClosePairs[left]
+                elif openClose[1] == right:
+                    return openClose[0] + left + right
+                else:
+                    continue
+            return ""
+        else:
+            return ""
+
     # make mirrored pair to judge symmetry of kerns
     def pairMirrored(self, pair):
         if self.w.mirroredPair.get() == True:
@@ -553,18 +587,18 @@ class MM2SpaceCenter:
             self.w.myTextBox.set(self.messageText) 
             
             if makeUpper == True:
-                self.setSpaceCenter(self.font, ' '+ self.pairMirrored(self.pair) + ' '+ self.ucString(pairstring)+ previousText)
+                self.setSpaceCenter(self.font, ' '+ self.pairMirrored(self.pair) + ' ' + self.openCloseContext(self.pair) + ' ' + self.ucString(pairstring)+ previousText)
 
             else:
 
-                self.setSpaceCenter(self.font, ' '+ self.pairMirrored(self.pair) + ' ' + self.lcString(pairstring)+ previousText)
+                self.setSpaceCenter(self.font, ' '+ self.pairMirrored(self.pair) + ' ' + self.openCloseContext(self.pair) + ' ' + self.lcString(pairstring)+ previousText)
 
 
         
         else:
             #set space center if words are found
             #not sure why there's always a /slash in from of the first word, added ' '+ to avoid losing the first word
-            self.setSpaceCenter(self.font, self.pairMirrored(self.pair) + ' ' + text)
+            self.setSpaceCenter(self.font, self.pairMirrored(self.pair) + ' ' + self.openCloseContext(self.pair) + ' ' + text)
             
             self.messageText = '😎 words found: '+ pairstring
             self.w.myTextBox.set(self.messageText)
