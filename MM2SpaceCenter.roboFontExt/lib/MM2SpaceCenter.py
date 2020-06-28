@@ -378,19 +378,25 @@ class MM2SpaceCenter:
     openClosePairs = {
 
         # initial/final punctuation (from https://www.compart.com/en/unicode/category/Pi and https://www.compart.com/en/unicode/category/Pf)
-        "‘": "’"
-        "‛": "’"
-        "“": "”"
-        "‟": "”"
-        "‹": "›"
-        "«": "»"
-        "»": "«"
-        "⸂": "⸃"
-        "⸄": "⸅"
-        "⸉": "⸊"
-        "⸌": "⸍"
-        "⸜": "⸝"
-        "⸠": "⸡"
+        "”": "”",
+        "’": "’",
+        "‚": "‘",
+        "„": "“",
+        "„": "”",
+        "‘": "’",
+        "‛": "’",
+        "“": "”",
+        "‟": "”",
+        "‹": "›",
+        "›": "‹",
+        "«": "»",
+        "»": "«",
+        "⸂": "⸃",
+        "⸄": "⸅",
+        "⸉": "⸊",
+        "⸌": "⸍",
+        "⸜": "⸝",
+        "⸠": "⸡",
 
         # Miscellaneous but common open/close pairs
         "'": "'",
@@ -398,6 +404,7 @@ class MM2SpaceCenter:
         "¡": "!",
         "¿": "?",
         "←": "→",
+        "→": "←",
 
         # opening/closing punctuation (from https://www.compart.com/en/unicode/category/Ps & https://www.compart.com/en/unicode/category/Pe)
         "(": ")",
@@ -414,16 +421,19 @@ class MM2SpaceCenter:
 
             print(left, right)
 
+            openCloseString = ""
+
             for openClose in self.openClosePairs.items():
                 if openClose[0] == left and openClose[1] == right:
-                    return left + right
-                elif openClose[0] == left:
-                    return left + right + self.openClosePairs[left]
-                elif openClose[1] == right:
-                    return openClose[0] + left + right
+                    openCloseString += left + right
+                if openClose[0] == left:
+                    openCloseString += left + right + self.openClosePairs[left]
+                if openClose[1] == right:
+                    openCloseString += openClose[0] + left + right
                 else:
                     continue
-            return ""
+            
+            return openCloseString
         else:
             return ""
 
