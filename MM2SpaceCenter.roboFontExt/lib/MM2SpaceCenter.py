@@ -412,29 +412,30 @@ class MM2SpaceCenter:
         "༺": "༻", "༼": "༽", "᚛": "᚜", "‚": "‘", "„": "“", "⁅": "⁆", "⁽": "⁾", "₍": "₎", "⌈": "⌉", "⌊": "⌋", "〈": "〉", "❨": "❩", "❪": "❫", "❬": "❭", "❮": "❯", "❰": "❱", "❲": "❳", "❴": "❵", "⟅": "⟆", "⟦": "⟧", "⟨": "⟩", "⟪": "⟫", "⟬": "⟭", "⟮": "⟯", "⦃": "⦄", "⦅": "⦆", "⦇": "⦈", "⦉": "⦊", "⦋": "⦌", "⦍": "⦎", "⦏": "⦐", "⦑": "⦒", "⦓": "⦔", "⦕": "⦖", "⦗": "⦘", "⧘": "⧙", "⧚": "⧛", "⧼": "⧽", "⸢": "⸣", "⸤": "⸥", "⸦": "⸧", "⸨": "⸩", "〈": "〉", "《": "》", "「": "」", "『": "』", "【": "】", "〔": "〕", "〖": "〗", "〘": "〙", "〚": "〛", "〝": "〞", "⹂": "〟", "﴿": "﴾", "︗": "︘", "︵": "︶", "︷": "︸", "︹": "︺", "︻": "︼", "︽": "︾", "︿": "﹀", "﹁": "﹂", "﹃": "﹄", "﹇": "﹈", "﹙": "﹚", "﹛": "﹜", "﹝": "﹞", "（": "）", "［": "］", "｛": "｝", "｟": "｠", "｢": "｣", 
     }
 
-    # this probably needs to run when the font is changed...
-    unicodesInFont = [u for glyph in CurrentFont() for u in glyph.unicodes]
+    
 
     def openCloseContext(self, pair):
         if self.w.openCloseContext.get() == True:
 
+            # get unicodes to make sure we don’t show pairs that don’t exist in the font
+            # TODO? may be better to move outside this function, if running it each time is slow. BUT it would have to listen for the CurrentFont to change.
+            unicodesInFont = [u for glyph in CurrentFont() for u in glyph.unicodes]
+
             left, self.leftEncoded = self.checkForUnencodedGname(self.font, pair[0])
             right, self.rightEncoded = self.checkForUnencodedGname(self.font, pair[1])
-
-            print(left, right)
 
             openCloseString = ""
 
             for openClose in self.openClosePairs.items():
                 # if both sides of pair are in an open+close pair, just add them
                 if openClose[0] == left and openClose[1] == right:
-                    openCloseString += left + right
+                    openCloseString += left + right + " "
                 # if the left is in an openClose pair and its companion is in the font, add them
-                if openClose[0] == left and ord(openClose[1]) in self.unicodesInFont:
-                    openCloseString += left + right + self.openClosePairs[left]
+                if openClose[0] == left and ord(openClose[1]) in unicodesInFont:
+                    openCloseString += left + right + self.openClosePairs[left] + " "
                 # if the right is in an openClose pair and its companion is in the font, add them
-                if openClose[1] == right  and ord(openClose[0]) in self.unicodesInFont:
-                    openCloseString += openClose[0] + left + right
+                if openClose[1] == right  and ord(openClose[0]) in unicodesInFont:
+                    openCloseString += openClose[0] + left + right + " "
                 else:
                     continue
             
@@ -447,7 +448,7 @@ class MM2SpaceCenter:
         if self.w.mirroredPair.get() == True:
             left, self.leftEncoded = self.checkForUnencodedGname(self.font, pair[0])
             right, self.rightEncoded = self.checkForUnencodedGname(self.font, pair[1])
-            return left + right + left
+            return left + right + left + " "
         else:
             return ""
 
@@ -610,14 +611,14 @@ class MM2SpaceCenter:
                 if self.w.mirroredPair.get() == True:  #if "start with mirrored pair" is checked, add this to text
                     text = self.pairMirrored(self.pair) + joinString + text 
                 if self.w.openCloseContext.get() == True: # if "show open+close" is checked, add this to text
-                    text = self.openCloseContext(self.pair) + ' ' + text 
+                    text = self.openCloseContext(self.pair) + text 
 
             else:
                 text = ' '.join([str(word) for word in textList])
                 if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
-                    text = self.pairMirrored(self.pair) +' '+ text
+                    text = self.pairMirrored(self.pair) + text
                 if self.w.openCloseContext.get() == True: # if "show open+close" is checked, add this to text
-                    text = self.openCloseContext(self.pair) + ' ' + text 
+                    text = self.openCloseContext(self.pair) + text 
 
 
                 
@@ -635,18 +636,18 @@ class MM2SpaceCenter:
             if makeUpper == True:
                 text = self.ucString(pairstring)+ previousText
                 if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
-                    text = self.pairMirrored(self.pair) + ' ' + text 
+                    text = self.pairMirrored(self.pair) + text 
                 if self.w.openCloseContext.get() == True: # if "show open+close" is checked, add this to text
-                    text = self.openCloseContext(self.pair) + ' ' + text 
+                    text = self.openCloseContext(self.pair) + text 
 
 
 
             else:
                 text = self.lcString(pairstring)+ previousText
                 if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
-                    text = self.pairMirrored(self.pair) + ' ' + text 
+                    text = self.pairMirrored(self.pair) + text 
                 if self.w.openCloseContext.get() == True: # if "show open+close" is checked, add this to text
-                    text = self.openCloseContext(self.pair) + ' ' + text 
+                    text = self.openCloseContext(self.pair) + text 
 
             
 
