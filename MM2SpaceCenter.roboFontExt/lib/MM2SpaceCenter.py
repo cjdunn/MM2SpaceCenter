@@ -609,11 +609,15 @@ class MM2SpaceCenter:
 
                 if self.w.mirroredPair.get() == True:  #if "start with mirrored pair" is checked, add this to text
                     text = self.pairMirrored(self.pair) + joinString + text 
+                if self.w.openCloseContext.get() == True: # if "show open+close" is checked, add this to text
+                    text = self.openCloseContext(self.pair) + ' ' + text 
 
             else:
                 text = ' '.join([str(word) for word in textList])
                 if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
-                    text = self.pairMirrored(self.pair) +' '+ text 
+                    text = self.pairMirrored(self.pair) +' '+ text
+                if self.w.openCloseContext.get() == True: # if "show open+close" is checked, add this to text
+                    text = self.openCloseContext(self.pair) + ' ' + text 
 
 
                 
