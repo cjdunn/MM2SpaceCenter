@@ -413,6 +413,9 @@ class MM2SpaceCenter:
         "༺": "༻", "༼": "༽", "᚛": "᚜", "‚": "‘", "„": "“", "⁅": "⁆", "⁽": "⁾", "₍": "₎", "⌈": "⌉", "⌊": "⌋", "〈": "〉", "❨": "❩", "❪": "❫", "❬": "❭", "❮": "❯", "❰": "❱", "❲": "❳", "❴": "❵", "⟅": "⟆", "⟦": "⟧", "⟨": "⟩", "⟪": "⟫", "⟬": "⟭", "⟮": "⟯", "⦃": "⦄", "⦅": "⦆", "⦇": "⦈", "⦉": "⦊", "⦋": "⦌", "⦍": "⦎", "⦏": "⦐", "⦑": "⦒", "⦓": "⦔", "⦕": "⦖", "⦗": "⦘", "⧘": "⧙", "⧚": "⧛", "⧼": "⧽", "⸢": "⸣", "⸤": "⸥", "⸦": "⸧", "⸨": "⸩", "〈": "〉", "《": "》", "「": "」", "『": "』", "【": "】", "〔": "〕", "〖": "〗", "〘": "〙", "〚": "〛", "〝": "〞", "⹂": "〟", "﴿": "﴾", "︗": "︘", "︵": "︶", "︷": "︸", "︹": "︺", "︻": "︼", "︽": "︾", "︿": "﹀", "﹁": "﹂", "﹃": "﹄", "﹇": "﹈", "﹙": "﹚", "﹛": "﹜", "﹝": "﹞", "（": "）", "［": "］", "｛": "｝", "｟": "｠", "｢": "｣", 
     }
 
+    # this probably needs to run when the font is changed...
+    unicodesInFont = [u for glyph in CurrentFont() for u in glyph.unicodes]
+
     def openCloseContext(self, pair):
         if self.w.openCloseContext.get() == True:
 
@@ -424,11 +427,14 @@ class MM2SpaceCenter:
             openCloseString = ""
 
             for openClose in self.openClosePairs.items():
+                # if both sides of pair are in an open+close pair, just add them
                 if openClose[0] == left and openClose[1] == right:
                     openCloseString += left + right
-                if openClose[0] == left:
+                # if the left is in an openClose pair and its companion is in the font, add them
+                if openClose[0] == left and ord(openClose[1]) in self.unicodesInFont:
                     openCloseString += left + right + self.openClosePairs[left]
-                if openClose[1] == right:
+                # if the right is in an openClose pair and its companion is in the font, add them
+                if openClose[1] == right  and ord(openClose[0]) in self.unicodesInFont:
                     openCloseString += openClose[0] + left + right
                 else:
                     continue
