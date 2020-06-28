@@ -371,14 +371,12 @@ class MM2SpaceCenter:
 
 
     def ucString(self, pairstring):
-        string = 'HOH'+pairstring+'HOHO'+pairstring+'OO'
+        string = 'HH'+pairstring+'HOHO'+pairstring+'OO'
         return string
 
     openClosePairs = {
 
         # initial/final punctuation (from https://www.compart.com/en/unicode/category/Pi and https://www.compart.com/en/unicode/category/Pf)
-        "”": "”",
-        "’": "’",
         "‚": "‘",
         "„": "“",
         "„": "”",
@@ -396,6 +394,8 @@ class MM2SpaceCenter:
         "⸌": "⸍",
         "⸜": "⸝",
         "⸠": "⸡",
+        "”": "”",
+        "’": "’",
 
         # Miscellaneous but common open/close pairs
         "'": "'",
