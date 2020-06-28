@@ -113,14 +113,13 @@ class MM2SpaceCenter:
         yPos += lineHeight * 1.2
         
         checkBoxSize = 18
-        self.w.mirroredPair = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
-        self.w.mirroredPairLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Start with mirrored pair (LRL)", sizeStyle="small")
+        self.w.openCloseContext = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
+        self.w.openCloseContextLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Show open+close context {n}", sizeStyle="small")
 
         yPos += lineHeight * 1.2
         
-        checkBoxSize = 18
-        self.w.openCloseContext = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
-        self.w.openCloseContextLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Show open+close context {n}", sizeStyle="small")
+        self.w.mirroredPair = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
+        self.w.mirroredPairLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Show mirrored pair (LRL)", sizeStyle="small")
         
         self.sorted = self.w.listOutput.get()
 
