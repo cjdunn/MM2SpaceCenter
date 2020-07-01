@@ -9,5 +9,9 @@ The wonderful [word-o-mat] extension by Nina Stössinger was a major influence, 
 
 Pull requests are greatly appreciated 🙏
 
+Thanks to @arrowtype there are now options to:
+– Show open+closed context
+– Show mirrored pair 
+
 [Metrics Machine]: https://extensionstore.robofont.com/extensions/metricsMachine/
 [word-o-mat]: https://github.com/ninastoessinger/word-o-mat
