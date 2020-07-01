@@ -53,7 +53,7 @@ class MM2SpaceCenter:
         self.maxLength = 15
         
         self.activateModule()
-        self.w = Window((250, 100), "MM2SpaceCenter")
+        self.w = Window((250, 155), "MM2SpaceCenter")
         
         self.w.myTextBox = TextBox((leftMargin, yPos, -10, 17), self.messageText, sizeStyle="regular") 
 
@@ -109,6 +109,17 @@ class MM2SpaceCenter:
         checkBoxSize = 18
         self.w.listOutput = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
         self.w.listLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Output as list sorted by width", sizeStyle="small")
+
+        yPos += lineHeight * 1.2
+        
+        checkBoxSize = 18
+        self.w.openCloseContext = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
+        self.w.openCloseContextLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Show open+close context {n}", sizeStyle="small")
+
+        yPos += lineHeight * 1.2
+        
+        self.w.mirroredPair = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
+        self.w.mirroredPairLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Show mirrored pair (LRL)", sizeStyle="small")
         
         self.sorted = self.w.listOutput.get()
 
@@ -360,8 +371,87 @@ class MM2SpaceCenter:
 
 
     def ucString(self, pairstring):
-        string = 'HOH'+pairstring+'HOHO'+pairstring+'OO'
+        string = 'HH'+pairstring+'HOHO'+pairstring+'OO'
         return string
+
+    openClosePairs = {
+
+        # initial/final punctuation (from https://www.compart.com/en/unicode/category/Pi and https://www.compart.com/en/unicode/category/Pf)
+        "‚": "‘",
+        "„": "“",
+        "„": "”",
+        "‘": "’",
+        "‛": "’",
+        "“": "”",
+        "‟": "”",
+        "‹": "›",
+        "›": "‹",
+        "«": "»",
+        "»": "«",
+        "⸂": "⸃",
+        "⸄": "⸅",
+        "⸉": "⸊",
+        "⸌": "⸍",
+        "⸜": "⸝",
+        "⸠": "⸡",
+        "”": "”",
+        "’": "’",
+
+        # Miscellaneous but common open/close pairs
+        "'": "'",
+        '"': '"',
+        "¡": "!",
+        "¿": "?",
+        "←": "→",
+        "→": "←",
+
+        # opening/closing punctuation (from https://www.compart.com/en/unicode/category/Ps & https://www.compart.com/en/unicode/category/Pe)
+        "(": ")",
+        "[": "]",
+        "{": "}",
+        "༺": "༻", "༼": "༽", "᚛": "᚜", "‚": "‘", "„": "“", "⁅": "⁆", "⁽": "⁾", "₍": "₎", "⌈": "⌉", "⌊": "⌋", "〈": "〉", "❨": "❩", "❪": "❫", "❬": "❭", "❮": "❯", "❰": "❱", "❲": "❳", "❴": "❵", "⟅": "⟆", "⟦": "⟧", "⟨": "⟩", "⟪": "⟫", "⟬": "⟭", "⟮": "⟯", "⦃": "⦄", "⦅": "⦆", "⦇": "⦈", "⦉": "⦊", "⦋": "⦌", "⦍": "⦎", "⦏": "⦐", "⦑": "⦒", "⦓": "⦔", "⦕": "⦖", "⦗": "⦘", "⧘": "⧙", "⧚": "⧛", "⧼": "⧽", "⸢": "⸣", "⸤": "⸥", "⸦": "⸧", "⸨": "⸩", "〈": "〉", "《": "》", "「": "」", "『": "』", "【": "】", "〔": "〕", "〖": "〗", "〘": "〙", "〚": "〛", "〝": "〞", "⹂": "〟", "﴿": "﴾", "︗": "︘", "︵": "︶", "︷": "︸", "︹": "︺", "︻": "︼", "︽": "︾", "︿": "﹀", "﹁": "﹂", "﹃": "﹄", "﹇": "﹈", "﹙": "﹚", "﹛": "﹜", "﹝": "﹞", "（": "）", "［": "］", "｛": "｝", "｟": "｠", "｢": "｣", 
+    }
+
+    
+
+    def openCloseContext(self, pair):
+        if self.w.openCloseContext.get() == True:
+
+            # get unicodes to make sure we don’t show pairs that don’t exist in the font
+            # TODO? may be better to move outside this function, if running it each time is slow. BUT it would have to listen for the CurrentFont to change.
+            unicodesInFont = [u for glyph in CurrentFont() for u in glyph.unicodes]
+
+            left, self.leftEncoded = self.checkForUnencodedGname(self.font, pair[0])
+            right, self.rightEncoded = self.checkForUnencodedGname(self.font, pair[1])
+
+            openCloseString = ""
+
+            for openClose in self.openClosePairs.items():
+                # if both sides of pair are in an open+close pair, just add them
+                if openClose[0] == left and openClose[1] == right:
+                    openCloseString += left + right + " "
+                # if the left is in an openClose pair and its companion is in the font, add them
+                if openClose[0] == left and ord(openClose[1]) in unicodesInFont:
+                    openCloseString += left + right + self.openClosePairs[left] + " "
+                # if the right is in an openClose pair and its companion is in the font, add them
+                if openClose[1] == right  and ord(openClose[0]) in unicodesInFont:
+                    openCloseString += openClose[0] + left + right + " "
+                else:
+                    continue
+            
+            return openCloseString
+        else:
+            return ""
+
+    # make mirrored pair to judge symmetry of kerns
+    def pairMirrored(self, pair):
+        if self.w.mirroredPair.get() == True:
+            left, self.leftEncoded = self.checkForUnencodedGname(self.font, pair[0])
+            right, self.rightEncoded = self.checkForUnencodedGname(self.font, pair[1])
+            return left + right + left + " "
+        else:
+            return ""
+
 
     def wordsForMMPair(self, ):
         
@@ -391,7 +481,6 @@ class MM2SpaceCenter:
 
         text = ''
         textList = []
-
 
         # try getting pairstring once in order to check if encoded
         pairstring = self.getPairstring(self.pair)
@@ -503,7 +592,7 @@ class MM2SpaceCenter:
             #make text upper again
             textList = list(  text.upper() for text in textList ) 
 
-        
+
 
 
         if not len(textList) == 0:            
@@ -519,8 +608,17 @@ class MM2SpaceCenter:
                 joinString = "\\n"            
                 text = joinString.join([str(word) for word in textList])
 
+                if self.w.mirroredPair.get() == True:  #if "start with mirrored pair" is checked, add this to text
+                    text = self.pairMirrored(self.pair) + joinString + text 
+                if self.w.openCloseContext.get() == True: # if "show open+close" is checked, add this to text
+                    text = self.openCloseContext(self.pair) + text 
+
             else:
                 text = ' '.join([str(word) for word in textList])
+                if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
+                    text = self.pairMirrored(self.pair) + text
+                if self.w.openCloseContext.get() == True: # if "show open+close" is checked, add this to text
+                    text = self.openCloseContext(self.pair) + text 
 
 
                 
@@ -535,25 +633,40 @@ class MM2SpaceCenter:
             self.messageText = '😞 no words found: '+ pairstring
             self.w.myTextBox.set(self.messageText) 
             
-          
-            
             if makeUpper == True:
-                self.setSpaceCenter(self.font, ' '+pairstring +' '+self.ucString(pairstring)+ previousText)
+                text = self.ucString(pairstring)+ previousText
+                if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
+                    text = self.pairMirrored(self.pair) + text 
+                if self.w.openCloseContext.get() == True: # if "show open+close" is checked, add this to text
+                    text = self.openCloseContext(self.pair) + text 
+
+
 
             else:
+                text = self.lcString(pairstring)+ previousText
+                if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
+                    text = self.pairMirrored(self.pair) + text 
+                if self.w.openCloseContext.get() == True: # if "show open+close" is checked, add this to text
+                    text = self.openCloseContext(self.pair) + text 
 
-                self.setSpaceCenter(self.font, ' '+pairstring +' ' +self.lcString(pairstring)+ previousText)
+            
+
+            text = text.lstrip() #remove whitespace  
+            self.setSpaceCenter(self.font, text)
 
 
         
         else:
             #set space center if words are found
             #not sure why there's always a /slash in from of the first word, added ' '+ to avoid losing the first word
-            self.setSpaceCenter(self.font, text)
             
+            text = text.lstrip() #remove whitespace             
+
+            self.setSpaceCenter(self.font, text)
+
             self.messageText = '😎 words found: '+ pairstring
             self.w.myTextBox.set(self.messageText)
-            
+
 
 
 
