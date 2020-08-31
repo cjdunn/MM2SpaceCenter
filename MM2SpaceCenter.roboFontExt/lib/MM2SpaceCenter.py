@@ -22,15 +22,28 @@ class MM2SpaceCenter:
     
     def activateModule(self):
         addObserver(self, "MMPairChangedObserver", "MetricsMachine.currentPairChanged")
+
+        addObserver(self, "FPPairChangedObserver", "FutureProof.currentPairChanged")
+
         print ('MM2SpaceCenter activated')
 
     def deactivateModule(self, sender):
         removeObserver(self, "MetricsMachine.currentPairChanged")
+        removeObserver(self, "FutureProof.currentPairChanged")
+
         print ('MM2SpaceCenter deactivated')
 
     def __init__(self, ):
-        self.font = metricsMachine.CurrentFont()
-        self.pair = metricsMachine.GetCurrentPair()
+        #self.font = metricsMachine.CurrentFont()
+        #self.pair = metricsMachine.GetCurrentPair()
+
+        self.font = CurrentFont()
+        try:
+            self.pair = metricsMachine.GetCurrentPair() 
+        except:
+             #self.pair = ('A', 'V')
+             self.pair = None
+        
         #self.wordlistPath = wordlistPath
         
         
@@ -277,6 +290,22 @@ class MM2SpaceCenter:
     
         #print ('current MM pair changed', self.pair)        
         self.wordsForMMPair()
+
+
+
+    ## same as MM Pair Changed Observer above, but making a separate function just to be safe
+    def FPPairChangedObserver(self, sender):
+        #add code here for when myObserver is triggered
+        currentPair = sender["pair"]
+        if currentPair == self.pair:
+            return
+        
+        self.pair = currentPair
+    
+        print ('current FP pair changed', self.pair)        
+        self.wordsForMMPair()
+
+
         
         #pass
         
@@ -296,7 +325,7 @@ class MM2SpaceCenter:
     def setSpaceCenter(self, font, text):    
         currentSC = CurrentSpaceCenter()
         if currentSC is None:
-            print ('opening space center, click back into MM window')
+            print ('opening space center, click back into kerning window')
             OpenSpaceCenter(font, newWindow=False)
             currentSC = CurrentSpaceCenter()
         currentSC.setRaw(text)
@@ -682,18 +711,36 @@ def run():
         print ('you must have a font open')
         return
 
+
+    
+
     try:
         p = metricsMachine.GetCurrentPair()
+        font = metricsMachine.CurrentFont()
         
     except:
-        print('you must have Metrics Machine open first')
-        return
+        
+
+        #p = futureProof.GetCurrentPair()
+        p = ('A', 'V') # set initial value
+        font = CurrentFont()
+        
+        
+        
+        
+        #print('you must have Metrics Machine open first')
+        #return
             
 
-
-    p = metricsMachine.GetCurrentPair()
     
-    font = metricsMachine.CurrentFont()
+    
+    
+    #p = metricsMachine.GetCurrentPair()
+    
+    #font = metricsMachine.CurrentFont()
+    
+    
+    
     
     ## old support for custom word path, add back later via UI? 
     # wordlistPath_rel = 'resources/ukacd.txt'
