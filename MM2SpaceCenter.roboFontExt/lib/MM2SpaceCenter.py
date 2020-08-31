@@ -302,7 +302,7 @@ class MM2SpaceCenter:
         
         self.pair = currentPair
     
-        print ('current FP pair changed', self.pair)        
+        #print ('current FP pair changed', self.pair)        
         self.wordsForMMPair()
 
 
