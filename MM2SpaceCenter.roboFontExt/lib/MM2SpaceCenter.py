@@ -41,8 +41,8 @@ class MM2SpaceCenter:
         try:
             self.pair = metricsMachine.GetCurrentPair() 
         except:
-             #self.pair = ('A', 'V')
-             self.pair = None
+             self.pair = ('A', 'V')
+             #self.pair = None
         
         #self.wordlistPath = wordlistPath
         
