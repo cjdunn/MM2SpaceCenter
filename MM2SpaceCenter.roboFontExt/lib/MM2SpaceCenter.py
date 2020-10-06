@@ -66,7 +66,7 @@ class MM2SpaceCenter:
         self.maxLength = 15
         
         self.activateModule()
-        self.w = Window((250, 155), "MM2SpaceCenter")
+        self.w = Window((220, 160), "MM2SpaceCenter")
         
         self.w.myTextBox = TextBox((leftMargin, yPos, -10, 17), self.messageText, sizeStyle="regular") 
 
@@ -123,19 +123,25 @@ class MM2SpaceCenter:
         self.w.listOutput = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
         self.w.listLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Output as list sorted by width", sizeStyle="small")
 
-        yPos += lineHeight * 1.2
+        yPos += lineHeight * 1.0
         
         checkBoxSize = 18
         self.w.openCloseContext = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
         self.w.openCloseContextLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Show open+close context {n}", sizeStyle="small")
 
-        yPos += lineHeight * 1.2
+        yPos += lineHeight * 1.0
         
         self.w.mirroredPair = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
         self.w.mirroredPairLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Show mirrored pair (LRL)", sizeStyle="small")
         
-        self.sorted = self.w.listOutput.get()
 
+        yPos += lineHeight * 1.0
+
+        self.w.allUppercase = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
+        self.w.allUppercaseLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "All Uppercase", sizeStyle="small")
+
+
+        self.sorted = self.w.listOutput.get()
 
         
         self.w.bind("close", self.deactivateModule)
@@ -617,8 +623,14 @@ class MM2SpaceCenter:
         
 
 
+        ###### check All Uppercase setting, and if true set variable makeUpper to True, which makes space center text UC
+        if self.w.allUppercase.get() == True:
+            makeUpper = True
+
+
         if makeUpper == True:    
             #make text upper again
+            ### should we force the pair to stay as is? for example with .uc punctuation if words are found, currently lc punct is shown. Should we find the pair in each work and re-insert the .uc version? 
             textList = list(  text.upper() for text in textList ) 
 
 
