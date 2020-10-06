@@ -736,6 +736,8 @@ class MM2SpaceCenter:
                 if self.w.openCloseContext.get() == True: # if "show open+close" is checked, add this to text
                     
                     
+                    
+                    
                     text = self.openCloseContextReturn(self.pair) + text 
 
             else:
@@ -763,13 +765,26 @@ class MM2SpaceCenter:
             self.w.myTextBox.set(self.messageText) 
             
             if makeUpper == True:
+
                 text = self.ucString(pairstring)+ previousText
-                if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
-                    text = self.pairMirrored(self.pair) + text 
+
+                
                 if self.w.openCloseContext.get() == True: # if "show open+close" is checked, add this to text
                     
                     
-                    text = self.openCloseContextReturn(self.pair) + text 
+                    openClosePair = self.openCloseContextReturn( self.pair)                   
+                    spacingString = self.ucString( openClosePair )
+                    spacingString = spacingString.replace("  ", " ") ## extra space gets added, later maybe it's best to change self.ucString function??
+                    
+                    text = spacingString + previousText                
+                
+                
+                
+                
+                
+                if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
+                    text = self.pairMirrored(self.pair) + text 
+
 
 
 
@@ -783,6 +798,13 @@ class MM2SpaceCenter:
 
 
                     text = self.openCloseContextReturn(self.pair) + text 
+
+                    openClosePair = self.openCloseContextReturn( self.pair)                   
+                    spacingString = self.lcString( openClosePair )
+                    spacingString = spacingString.replace("  ", " ") ## extra space gets added, later maybe it's best to change self.ucString function??
+                    
+                    text = spacingString + previousText   
+
 
             
 
