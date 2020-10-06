@@ -464,6 +464,12 @@ class MM2SpaceCenter:
     openCloseUnencodedPairs = {
     
     "parenleft.uc": "parenright.uc", 
+    "bracketleft.uc": "bracketright.uc", 
+    "braceleft.uc": "braceright.uc", 
+    "exclamdown.uc": "exclam.uc", 
+    "questiondown.uc": "question.uc", 
+    "guilsinglleft.uc": "guilsinglright.uc",
+    "guillemotleft.uc": "guillemotright.uc",
 
     
     }
