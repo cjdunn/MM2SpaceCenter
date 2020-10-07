@@ -513,13 +513,13 @@ class MM2SpaceCenter:
                 
                 # if both sides of pair are in an open+close pair, just add them
                 if openClose[0] == left and openClose[1] == right:
-                    openCloseString += left + right + " "
+                    openCloseString += left + right + "" #remove trailing space
                 # if the left is in an openClose pair and its companion is in the font, add them
                 if openClose[0] == left and ord(openClose[1]) in unicodesInFont:
-                    openCloseString += left + right + self.openClosePairs[left] + " "
+                    openCloseString += left + right + self.openClosePairs[left] + "" #remove trailing space
                 # if the right is in an openClose pair and its companion is in the font, add them
                 if openClose[1] == right  and ord(openClose[0]) in unicodesInFont:
-                    openCloseString += openClose[0] + left + right + " "
+                    openCloseString += openClose[0] + left + right + "" #remove trailing space
                     
                     print ('right matches', right, openCloseString)
                 
@@ -571,7 +571,7 @@ class MM2SpaceCenter:
         if self.w.mirroredPair.get() == True:
             left, self.leftEncoded = self.checkForUnencodedGname(self.font, pair[0])
             right, self.rightEncoded = self.checkForUnencodedGname(self.font, pair[1])
-            return left + right + left + " "
+            return left + right + left + " " 
         else:
             return ""
 
@@ -778,9 +778,21 @@ class MM2SpaceCenter:
                 if self.w.openCloseContext.get() == True: # if "show open+close" is checked, add this to text
                     
                     
-                    openClosePair = self.openCloseContextReturn( self.pair)                   
+                    openClosePair = self.openCloseContextReturn( self.pair)  
+                    
+                    ### debug start 2
+                    #print ('openClosePair:'+openClosePair+'#')
+                    openClosePair= openClosePair.lstrip()
+                    
+                    
+                    #print ('openClosePair:'+openClosePair+'#')
+                    ### debug end 2
+                    
+                                     
                     spacingString = self.ucString( openClosePair )
                     spacingString = spacingString.replace("  ", " ") ## extra space gets added, later maybe it's best to change self.ucString function??
+                    spacingString = spacingString.replace("  ", " ") ## do again to catch double spaces 
+                    
                     
                     text = spacingString + previousText                
                 
@@ -805,10 +817,25 @@ class MM2SpaceCenter:
 
                     text = self.openCloseContextReturn(self.pair) + text 
 
-                    openClosePair = self.openCloseContextReturn( self.pair)                   
-                    spacingString = self.lcString( openClosePair )
-                    spacingString = spacingString.replace("  ", " ") ## extra space gets added, later maybe it's best to change self.ucString function??
+                    openClosePair = self.openCloseContextReturn( self.pair) 
                     
+                    ### debug start
+                    print ('openClosePair:'+openClosePair+'#')
+                    print ('pair:'+self.pair+'#')
+                    #openClosePair= openClosePair.lstrip()
+                    #print ('openClosePair:'+openClosePair+'#')
+                    ### debug end
+
+                    openClosePair = openClosePair.replace("  ", " ") ## extra space gets added, later maybe it's best to change self.ucString function??
+                    openClosePair = openClosePair.replace("  ", " ") ## do again to catch double spaces 
+                    
+                                      
+                    spacingString = self.lcString( openClosePair )
+                    spacingString = spacingString.replace("  ", " ")                    
+                    # spacingString = spacingString.replace("  ", " ") ## do again to catch double spaces 
+                    
+                    
+                                        
                     text = spacingString + previousText   
 
 
