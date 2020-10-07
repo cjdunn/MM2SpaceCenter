@@ -471,6 +471,12 @@ class MM2SpaceCenter:
     "guilsinglleft.uc": "guilsinglright.uc",
     "guillemotleft.uc": "guillemotright.uc",
 
+
+    "guilsinglright.uc": "guilsinglleft.uc",
+    "guillemotright.uc": "guillemotleft.uc",
+
+
+
     
     }
 
@@ -788,8 +794,18 @@ class MM2SpaceCenter:
                     #print ('openClosePair:'+openClosePair+'#')
                     ### debug end 2
                     
-                                     
-                    spacingString = self.ucString( openClosePair )
+                    if len(openClosePair) > 0 : ## pair found                 
+                        spacingString = self.ucString( openClosePair )
+
+                    else: ## pair not found
+                        
+                        if debug == True:
+                            print ('open+close pair not found')
+                        spacingString = self.ucString( pairstring )
+                    
+                    
+                    
+                    
                     spacingString = spacingString.replace("  ", " ") ## extra space gets added, later maybe it's best to change self.ucString function??
                     spacingString = spacingString.replace("  ", " ") ## do again to catch double spaces 
                     
@@ -820,8 +836,8 @@ class MM2SpaceCenter:
                     openClosePair = self.openCloseContextReturn( self.pair) 
                     
                     ### debug start
-                    print ('openClosePair:'+openClosePair+'#')
-                    print ('pair:'+self.pair+'#')
+                    #print ('openClosePair:'+openClosePair+'#')
+                    #print ('pair:'+str(self.pair)+'#')
                     #openClosePair= openClosePair.lstrip()
                     #print ('openClosePair:'+openClosePair+'#')
                     ### debug end
@@ -829,8 +845,18 @@ class MM2SpaceCenter:
                     openClosePair = openClosePair.replace("  ", " ") ## extra space gets added, later maybe it's best to change self.ucString function??
                     openClosePair = openClosePair.replace("  ", " ") ## do again to catch double spaces 
                     
+                    
+                    
+                    if len(openClosePair) > 0 : ## pair found 
                                       
-                    spacingString = self.lcString( openClosePair )
+                        spacingString = self.lcString( openClosePair )
+                        
+                    else:
+                        if debug == True:
+                            print ('open+close pair not found')
+                        
+                        spacingString = self.lcString( pairstring )
+                        
                     spacingString = spacingString.replace("  ", " ")                    
                     # spacingString = spacingString.replace("  ", " ") ## do again to catch double spaces 
                     
