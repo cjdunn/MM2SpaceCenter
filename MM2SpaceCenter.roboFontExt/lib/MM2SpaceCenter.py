@@ -410,7 +410,10 @@ class MM2SpaceCenter:
         
 
     def lcString(self, pairstring):
-        string = 'non'+pairstring+'nono'+pairstring+'oo'
+        string = 'non'+pairstring+'nono'+pairstring+'oo' #temp commented out
+        #string = '11'+pairstring+'1010'+pairstring+'00' #use for numbers
+        #string = '11'+pairstring+'/fraction /eight.dnom 10'+pairstring+'/fraction /eight.dnom 00' #use for fracs
+
         return string
 
 
