@@ -132,13 +132,13 @@ class MM2SpaceCenter:
         yPos += lineHeight * 1.0
         
         self.w.mirroredPair = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
-        self.w.mirroredPairLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Show mirrored pair (LRL)", sizeStyle="small")
+        self.w.mirroredPairLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Show mirrored pair (LRLR)", sizeStyle="small")
         
 
         yPos += lineHeight * 1.0
 
         self.w.allUppercase = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
-        self.w.allUppercaseLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "All Uppercase", sizeStyle="small")
+        self.w.allUppercaseLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "All uppercase context", sizeStyle="small")
 
 
         self.sorted = self.w.listOutput.get()
@@ -395,7 +395,7 @@ class MM2SpaceCenter:
     #convert char gnames to chars to find words in dict
     def pair2char(self, pair):
         
-        debug = False
+        self.debug = False
         
         try:
             #print ('pair =', pair)
@@ -404,7 +404,7 @@ class MM2SpaceCenter:
             pair_char = (left, right)
             return pair_char
         except:
-            if debug == True:
+            if self.debug == True:
                 print ("couldn't convert pair to chars")            
             return pair
         
@@ -441,8 +441,8 @@ class MM2SpaceCenter:
         "⸌": "⸍",
         "⸜": "⸝",
         "⸠": "⸡",
-        "”": "”",
-        "’": "’",
+        #"”": "”",  ##these will make two contexts show up for quotes so leaving them off for now
+        #"’": "’",
 
         # Miscellaneous but common open/close pairs
         "'": "'",
@@ -451,6 +451,8 @@ class MM2SpaceCenter:
         "¿": "?",
         "←": "→",
         "→": "←",
+        "/": "\\",
+
 
         # opening/closing punctuation (from https://www.compart.com/en/unicode/category/Ps & https://www.compart.com/en/unicode/category/Pe)
         "(": ")",
@@ -580,7 +582,7 @@ class MM2SpaceCenter:
         if self.w.mirroredPair.get() == True:
             left, self.leftEncoded = self.checkForUnencodedGname(self.font, pair[0])
             right, self.rightEncoded = self.checkForUnencodedGname(self.font, pair[1])
-            return left + right + left + " " 
+            return left + right + left + right + " " 
         else:
             return ""
 
@@ -802,7 +804,7 @@ class MM2SpaceCenter:
 
                     else: ## pair not found
                         
-                        if debug == True:
+                        if self.debug == True:
                             print ('open+close pair not found')
                         spacingString = self.ucString( pairstring )
                     
@@ -855,7 +857,7 @@ class MM2SpaceCenter:
                         spacingString = self.lcString( openClosePair )
                         
                     else:
-                        if debug == True:
+                        if self.debug == True:
                             print ('open+close pair not found')
                         
                         spacingString = self.lcString( pairstring )
