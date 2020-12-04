@@ -115,6 +115,13 @@ class MM2SpaceCenter:
         self.w.source.set(4) #default to English for now
         self.source = None 
         self.source = self.w.source.get() #get value, to use for other functions
+        
+        
+        ##### add drop down to choose context: auto, UC, lc, figs, ??, not functional yet, but made as a placeholder
+        
+        #self.contextOptions = ['Auto', 'UC', 'LC', 'Figs']
+        #self.w.context = PopUpButton((leftMargin+90, yPos, 85, 20), [], sizeStyle="small", callback="")
+        #self.w.context.setItems(self.contextOptions)
 
 
         yPos += lineHeight * 1.2
@@ -410,8 +417,8 @@ class MM2SpaceCenter:
         
 
     def lcString(self, pairstring):
-        string = 'non'+pairstring+'nono'+pairstring+'oo' #temp commented out
-        #string = '11'+pairstring+'1010'+pairstring+'00' #use for numbers
+        #string = 'non'+pairstring+'nono'+pairstring+'oo' #temp commented out
+        string = '11'+pairstring+'1010'+pairstring+'00' #use for numbers
         #string = '11'+pairstring+'/fraction /eight.dnom 10'+pairstring+'/fraction /eight.dnom 00' #use for fracs
 
         return string
