@@ -417,9 +417,15 @@ class MM2SpaceCenter:
         
 
     def lcString(self, pairstring):
-        #string = 'non'+pairstring+'nono'+pairstring+'oo' #temp commented out
-        string = '11'+pairstring+'1010'+pairstring+'00' #use for numbers
+        string = 'non'+pairstring+'nono'+pairstring+'oo' #temp commented out
+        #string = '11'+pairstring+'1010'+pairstring+'00' #use for numbers
         #string = '11'+pairstring+'/fraction /eight.dnom 10'+pairstring+'/fraction /eight.dnom 00' #use for fracs
+        #string = '11/eight.numr /fraction '+pairstring+' 10/one.numr /fraction '+pairstring+'00' #use for fracs2
+        #string = '11/eight.numr '+pairstring+' 10/one.numr '+pairstring+'00' #use for fracs2
+        #string = '11'+pairstring+'/eight.dnom 10'+pairstring+'/eight.dnom 00' #use for fracs
+
+        #string = '/one.dnom /one.dnom '+pairstring+'/one.dnom /zero.dnom '+pairstring+'/zero.dnom /zero.dnom ' #use for dnoms
+
 
         return string
 
@@ -459,6 +465,11 @@ class MM2SpaceCenter:
         "←": "→",
         "→": "←",
         "/": "\\",
+        
+        "<": ">", #less, greater
+        ">": "<", #greater, less
+        
+        
 
 
         # opening/closing punctuation (from https://www.compart.com/en/unicode/category/Ps & https://www.compart.com/en/unicode/category/Pe)
@@ -487,7 +498,8 @@ class MM2SpaceCenter:
     "guilsinglright.uc": "guilsinglleft.uc",
     "guillemotright.uc": "guillemotleft.uc",
 
-
+    "slash": "backslash", #should be encoded but adding here because those aren't working for some reason
+    "backslash": "slash", #should be encoded but adding here because those aren't working for some reason
 
     
     }
