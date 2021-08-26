@@ -121,7 +121,7 @@ class MM2SpaceCenter:
         yPos += lineHeight * 1.2
         
         self.w.handleSuffix = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
-        self.w.handleSuffixLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Strip glyph name suffixes for SC", sizeStyle="small")
+        self.w.handleSuffixLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Handle suffixed glyph names", sizeStyle="small")
         
 
         self.sorted = self.w.listOutput.get()
