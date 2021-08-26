@@ -53,13 +53,10 @@ class MM2SpaceCenter:
         self.maxLength = 15
         
         self.activateModule()
-        self.w = Window((250, 155), "MM2SpaceCenter")
+        self.w = Window((250, 180), "MM2SpaceCenter")
         
         self.w.myTextBox = TextBox((leftMargin, yPos, -10, 17), self.messageText, sizeStyle="regular") 
 
-
-
-        
         yPos += (lineHeight * 1.2) 
 
         
@@ -121,9 +118,13 @@ class MM2SpaceCenter:
         self.w.mirroredPair = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
         self.w.mirroredPairLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Show mirrored pair (LRL)", sizeStyle="small")
         
+        yPos += lineHeight * 1.2
+        
+        self.w.handleSuffix = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
+        self.w.handleSuffixLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Strip glyph name suffixes for SC", sizeStyle="small")
+        
+
         self.sorted = self.w.listOutput.get()
-
-
         
         self.w.bind("close", self.deactivateModule)
         self.w.open()
@@ -452,6 +453,34 @@ class MM2SpaceCenter:
         else:
             return ""
 
+    # chop suffixes off glyphnames to find context strings, but leave them for Space Center
+    def suffixHandle(self, pair):
+
+        currentSC = CurrentSpaceCenter()
+
+        # get first part of glyph name, then return this name below
+        if "." in pair[0]:
+            side1base = pair[0].split(".",1)[0]
+            currentSC.setSuffix("." + pair[0].split(".",1)[1])
+        else:
+            side1base = pair[0] 
+
+        if "." in pair[1]:
+            side2base = pair[1].split(".",1)[0]
+            currentSC.setSuffix("." + pair[1].split(".",1)[1])
+        else:
+            side2base = pair[1]
+
+        # if neither side has a suffix, clear suffixes applied in space center
+        if "." not in pair[0] and "." not in pair[1]:
+            currentSC.setSuffix(None)
+
+        left, self.leftEncoded = self.checkForUnencodedGname(self.font, side1base)
+        right, self.rightEncoded = self.checkForUnencodedGname(self.font, side2base)
+
+        return left + right
+
+
 
     def wordsForMMPair(self, ):
         
@@ -486,7 +515,13 @@ class MM2SpaceCenter:
         pairstring = self.getPairstring(self.pair)
 
         #convert MM tuple into search pair to check uc, lc, mixed case. Maybe need a different var name here? 
-        pair2char = ''.join(self.pair2char(self.pair))
+        # strip suffixes if option is selected
+        if self.w.handleSuffix.get() == True:
+            pair = self.suffixHandle(self.pair)
+            pair2char = ''.join(self.pair2char(pair))
+        else:
+            pair2char = ''.join(self.pair2char(self.pair))
+
         
         
         
