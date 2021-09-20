@@ -33,43 +33,37 @@ class MM2SpaceCenter:
         self.pair = metricsMachine.GetCurrentPair()
         #self.wordlistPath = wordlistPath
         
-        
-        
-        
-        leftMargin = 10
-        topMargin = 5
+        leftMargin = 15
+        topMargin = 13
         yPos = 0 
         lineHeight = 20
         
-        yPos += topMargin
+        w_w = 280
+        w_h = 185
         
-        self.messageText = 'MM2SpaceCenter activated 😎'
+        self.messageText = '😎 Ready'
 
-
-
-        
         self.wordCount = 20
         self.minLength = 3
         self.maxLength = 15
         
         self.activateModule()
-        self.w = Window((250, 155), "MM2SpaceCenter")
+        self.w = Window((w_w, w_h), "MM2SpaceCenter")
         
-        self.w.myTextBox = TextBox((leftMargin, yPos, -10, 17), self.messageText, sizeStyle="regular") 
-
-
-
+        yPos = -21
         
-        yPos += (lineHeight * 1.2) 
-
+        self.w.statusBar = Box((3, -35, -3, 32))
+        self.w.statusBar.text = TextBox((leftMargin - 12, yPos, -10, 40), self.messageText, sizeStyle="regular") 
         
+        yPos = topMargin
+
         topLineFields = {
             "wordCount": [0+leftMargin,   self.wordCount, 20],
             #"minLength": [108+leftMargin, self.minLength, 3],
             #"maxLength": [145+leftMargin, self.maxLength, 10],
         }
         topLineLabels = {
-            "wcText": [31+leftMargin, 78, 'words', 'left'],
+            "wcText": [52+leftMargin, 78, 'words', 'left'],
 
             #"wcText": [31+leftMargin, 78, 'words with', 'left'],
 
@@ -80,62 +74,53 @@ class MM2SpaceCenter:
         # for label, values in topLineFields.items():
         #     setattr(self.w, label, EditText((values[0], 0+yPos, 28, 22), text=values[1], placeholder=str(values[2])))
 
-        self.w.wordCount = EditText( (0+leftMargin, 0+yPos, 28, 22), text=self.wordCount, placeholder=self.wordCount, callback=self.wordCountCallback) 
-        
-
+        self.w.wordCount = EditText( (0+leftMargin, 0+yPos, 50, 22), text=self.wordCount, placeholder=self.wordCount, callback=self.wordCountCallback) 
+        self.w.wordCount.getNSTextField().setFocusRingType_(1)
+    
         for label, values in topLineLabels.items():
             setattr(self.w, label, TextBox((values[0], 3+yPos, values[1], 22), text=values[2], alignment=values[3]))
 
-        
-        yPos += lineHeight * 1.3
+        yPos += lineHeight * 1.3 + 3
         
         self.loadDictionaries()
         
         # language selection
         languageOptions = list(self.languageNames)
         
-        
-        
-        self.w.source = PopUpButton((leftMargin, yPos, 85, 20), [], sizeStyle="small", callback=self.changeSourceCallback)
+        self.w.source = PopUpButton((leftMargin, yPos, 140, 20), [], sizeStyle="small", callback=self.changeSourceCallback)
         self.w.source.setItems(languageOptions)
         
         self.w.source.set(4) #default to English for now
         self.source = None 
         self.source = self.w.source.get() #get value, to use for other functions
 
-
-        yPos += lineHeight * 1.2
+        yPos += lineHeight * 1.2 + 5
         
         checkBoxSize = 18
         self.w.listOutput = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
-        self.w.listLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Output as list sorted by width", sizeStyle="small")
+        self.w.listLabel = TextBox((checkBoxSize+12, yPos+2, -leftMargin, checkBoxSize), "Output as list sorted by width", sizeStyle="small")
 
         yPos += lineHeight * 1.2
         
         checkBoxSize = 18
         self.w.openCloseContext = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
-        self.w.openCloseContextLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Show open+close context {n}", sizeStyle="small")
+        self.w.openCloseContextLabel = TextBox((checkBoxSize+12, yPos+2, -leftMargin, checkBoxSize), "Show open+close context {n}", sizeStyle="small")
 
         yPos += lineHeight * 1.2
         
         self.w.mirroredPair = CheckBox((leftMargin, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
-        self.w.mirroredPairLabel = TextBox((checkBoxSize+5, yPos+2, -leftMargin, checkBoxSize), "Show mirrored pair (LRL)", sizeStyle="small")
+        self.w.mirroredPairLabel = TextBox((checkBoxSize+12, yPos+2, -leftMargin, checkBoxSize), "Show mirrored pair (LRL)", sizeStyle="small")
         
         self.sorted = self.w.listOutput.get()
 
-
-        
         self.w.bind("close", self.deactivateModule)
         self.w.open()
-        
 
 
     def sortedCallback(self, sender):
         self.sorted = self.w.listOutput.get()
         self.wordsForMMPair()  
         
-        
-
     def wordCountCallback(self,sender):
         #print ('old', self.wordCount)
 
@@ -144,10 +129,6 @@ class MM2SpaceCenter:
         #update space center
         self.wordsForMMPair()        
         
-
-
-
-
     #from word-o-mat
     def loadDictionaries(self):
         """Load the available wordlists and read their contents."""
@@ -157,7 +138,6 @@ class MM2SpaceCenter:
 
         self.textfiles = ['catalan', 'czech', 'danish', 'dutch', 'ukacd', 'finnish', 'french', 'german', 'hungarian', 'icelandic', 'italian', 'latin', 'norwegian', 'polish', 'slovak', 'spanish', 'vietnamese']
         self.languageNames = ['Catalan', 'Czech', 'Danish', 'Dutch', 'English', 'Finnish', 'French', 'German', 'Hungarian', 'Icelandic', 'Italian', 'Latin', 'Norwegian', 'Polish', 'Slovak', 'Spanish', 'Vietnamese syllables']
-
 
         #self.source = getExtensionDefault("com.cjtype.MM2SpaceCenter.source", 4)
 
@@ -186,8 +166,6 @@ class MM2SpaceCenter:
         self.dictWords["user"] = lines.splitlines()
         
         #print ('load dicts')
-
-
 
     def changeSourceCallback(self, sender):
         """On changing source/wordlist, check if a custom word list should be loaded."""
@@ -243,7 +221,6 @@ class MM2SpaceCenter:
         return wordlist_sorted
 
 
-
     def findKerning(self, chars):
         """Helper function to find kerning between two given glyphs.
         This assumes MetricsMachine style group names."""
@@ -264,7 +241,6 @@ class MM2SpaceCenter:
             return self.font.kerning[key]
         else:
             return 0
-
 
 
     def MMPairChangedObserver(self, sender):
@@ -291,8 +267,6 @@ class MM2SpaceCenter:
     #                 return obj
                 
 
-
-
     def setSpaceCenter(self, font, text):    
         currentSC = CurrentSpaceCenter()
         if currentSC is None:
@@ -302,7 +276,6 @@ class MM2SpaceCenter:
         currentSC.setRaw(text)
 
     
-
     def randomly(self, seq):
         shuffled = list(seq)
         random.shuffle(shuffled)
@@ -315,15 +288,10 @@ class MM2SpaceCenter:
         return char
 
 
-
-
-
     def checkForUnencodedGname(self, font, gname):
         glyphIsEncoded = False
         
         escapeList = ['slash', 'backslash']
-        
-            
         
         if (not font[gname].unicodes) or (gname in escapeList):
             scString = '/'+gname+' '
@@ -334,8 +302,6 @@ class MM2SpaceCenter:
         return(scString, glyphIsEncoded)
 
 
-
-
     def getPairstring(self, pair):
 
         left, self.leftEncoded = self.checkForUnencodedGname(self.font, pair[0])
@@ -344,8 +310,6 @@ class MM2SpaceCenter:
         pairstring = left+right
             
         return pairstring
-
-
 
 
     #convert char gnames to chars to find words in dict
@@ -413,7 +377,6 @@ class MM2SpaceCenter:
     }
 
     
-
     def openCloseContext(self, pair):
         if self.w.openCloseContext.get() == True:
 
@@ -455,11 +418,8 @@ class MM2SpaceCenter:
 
     def wordsForMMPair(self, ):
         
-        
         self.mixedCase = False
 
-
-        
         ### temp comment out to check speed
         self.source = self.w.source.get()
         wordsAll = self.dictWords[self.textfiles[self.source]] 
@@ -473,8 +433,6 @@ class MM2SpaceCenter:
         
         #print(v)
 
-
-        
         #print ('self.wordCount', self.wordCount)
         
         #currently allows any word lenght, this could be customized later
@@ -489,12 +447,7 @@ class MM2SpaceCenter:
         pair2char = ''.join(self.pair2char(self.pair))
         
         
-        
-        
-        
         #check Encoding
-        
-        
         
 
         #print (pairstring)
@@ -520,8 +473,6 @@ class MM2SpaceCenter:
                 if (self.leftEncoded == True) and (self.rightEncoded == True) : 
                     self.mixedCase = True
 
-
-    
         try:
             currentSC = CurrentSpaceCenter()
             previousText = currentSC.getRaw()
@@ -529,7 +480,6 @@ class MM2SpaceCenter:
             previousText = ''
             pass
 
-        
         count = 0 
         
         #self.usePhrases = False 
@@ -560,13 +510,8 @@ class MM2SpaceCenter:
                 #stop when you get enough results
                 if count >= wordCountValue:
                     #print (text)
-                
-                    break
-                    
+                    break   
             pass            
-        
-        
-        
         
         
         else:
@@ -585,14 +530,11 @@ class MM2SpaceCenter:
                     #print (text)
                 
                     break
-        
-
+    
 
         if makeUpper == True:    
             #make text upper again
             textList = list(  text.upper() for text in textList ) 
-
-
 
 
         if not len(textList) == 0:            
@@ -621,7 +563,6 @@ class MM2SpaceCenter:
                     text = self.openCloseContext(self.pair) + text 
 
 
-                
         # if no words are found, show spacing string and previous text
         if len(text) == 0:
 
@@ -631,7 +572,7 @@ class MM2SpaceCenter:
             previousText = '\\n no words for pair ' + pairstring
             
             self.messageText = '😞 no words found: '+ pairstring
-            self.w.myTextBox.set(self.messageText) 
+            self.w.statusBar.text.set(self.messageText) 
             
             if makeUpper == True:
                 text = self.ucString(pairstring)+ previousText
@@ -640,8 +581,6 @@ class MM2SpaceCenter:
                 if self.w.openCloseContext.get() == True: # if "show open+close" is checked, add this to text
                     text = self.openCloseContext(self.pair) + text 
 
-
-
             else:
                 text = self.lcString(pairstring)+ previousText
                 if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
@@ -649,13 +588,10 @@ class MM2SpaceCenter:
                 if self.w.openCloseContext.get() == True: # if "show open+close" is checked, add this to text
                     text = self.openCloseContext(self.pair) + text 
 
-            
-
             text = text.lstrip() #remove whitespace  
             self.setSpaceCenter(self.font, text)
 
 
-        
         else:
             #set space center if words are found
             #not sure why there's always a /slash in from of the first word, added ' '+ to avoid losing the first word
@@ -665,15 +601,7 @@ class MM2SpaceCenter:
             self.setSpaceCenter(self.font, text)
 
             self.messageText = '😎 words found: '+ pairstring
-            self.w.myTextBox.set(self.messageText)
-
-
-
-
-
-        
-        
-
+            self.w.statusBar.text.set(self.messageText)
 
 
 
@@ -689,8 +617,7 @@ def run():
         print('you must have Metrics Machine open first')
         return
             
-
-
+            
     p = metricsMachine.GetCurrentPair()
     
     font = metricsMachine.CurrentFont()
@@ -713,17 +640,9 @@ def run():
     p = MM2SpaceCenter()    
             
 
-
-
-  
-
-
 run()
         
 # to do:       
 # make sure space center "show kerning" is set to on
 # add ability to change word lenght 
-
-
-
 
