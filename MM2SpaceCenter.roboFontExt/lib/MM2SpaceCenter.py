@@ -34,7 +34,7 @@ class MM2SpaceCenter:
         #self.wordlistPath = wordlistPath
         
         leftMargin = 15
-        topMargin = 13
+        topMargin = 0
         yPos = 0 
         lineHeight = 20
         
@@ -50,12 +50,12 @@ class MM2SpaceCenter:
         self.activateModule()
         self.w = Window((w_w, w_h), "MM2SpaceCenter")
         
-        yPos = -21
-        
-        self.w.statusBar = Box((3, -35, -3, 32))
-        self.w.statusBar.text = TextBox((leftMargin - 12, yPos, -10, 40), self.messageText, sizeStyle="regular") 
-        
         yPos = topMargin
+        
+        self.w.statusBar = Box((3, 3, -3, 32))
+        self.w.statusBar.text = TextBox((leftMargin - 10, yPos, -10, 40), self.messageText, sizeStyle="regular") 
+        
+        yPos = 46
 
         topLineFields = {
             "wordCount": [0+leftMargin,   self.wordCount, 20],
