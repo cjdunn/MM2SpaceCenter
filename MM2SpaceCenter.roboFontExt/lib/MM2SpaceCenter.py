@@ -437,7 +437,7 @@ class MM2SpaceCenter:
  
         if self.context == 'Frac': 
             # start with figs context
-            string = '11'+pairstring+'1010'+pairstring+'00' #use for numbers
+            string = '11'+pairstring+'⁄1010⁄'+pairstring+'00' #use for numbers
 
             #look for fraction at start of pair
             if pairstring.startswith('⁄'): ##fraction unicode glyph, not slash
