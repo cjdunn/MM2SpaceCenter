@@ -23,7 +23,6 @@ class MM2SpaceCenter:
     def activateModule(self):
         addObserver(self, "MMPairChangedObserver", "MetricsMachine.currentPairChanged")
 
-        addObserver(self, "FPPairChangedObserver", "FutureProof.currentPairChanged")
 
         print ('MM2SpaceCenter activated')
 
