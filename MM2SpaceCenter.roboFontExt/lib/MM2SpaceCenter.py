@@ -119,9 +119,9 @@ class MM2SpaceCenter:
         
         ##### add drop down to choose context: auto, UC, lc, figs, ??, not functional yet, but made as a placeholder
         
-        #self.contextOptions = ['Auto', 'UC', 'LC', 'Figs']
-        #self.w.context = PopUpButton((leftMargin+90, yPos, 85, 20), [], sizeStyle="small", callback="")
-        #self.w.context.setItems(self.contextOptions)
+        self.contextOptions = ['Auto', 'UC', 'LC', 'Figs']
+        self.w.context = PopUpButton((leftMargin+90, yPos, 85, 20), [], sizeStyle="small", callback="")
+        self.w.context.setItems(self.contextOptions)
 
 
         yPos += lineHeight * 1.2
