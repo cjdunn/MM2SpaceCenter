@@ -42,9 +42,6 @@ class MM2SpaceCenter:
             self.pair = metricsMachine.GetCurrentPair() 
         except:
              self.pair = ('A', 'V')
-             #self.pair = None
-        
-        #self.wordlistPath = wordlistPath
         
         
         
@@ -53,7 +50,8 @@ class MM2SpaceCenter:
         topMargin = 5
         yPos = 0 
         lineHeight = 20
-        
+        columnWidth = 85  
+
         yPos += topMargin
         
         self.messageText = 'MM2SpaceCenter activated 😎'
@@ -71,38 +69,27 @@ class MM2SpaceCenter:
         self.w.myTextBox = TextBox((leftMargin, yPos, -10, 17), self.messageText, sizeStyle="regular") 
 
 
-
         
         yPos += (lineHeight * 1.2) 
 
-        
-        topLineFields = {
-            "wordCount": [0+leftMargin,   self.wordCount, 20],
-            # "minLength": [108+leftMargin, self.minLength, 3],
-            #"maxLength": [145+leftMargin, self.maxLength, 10],
-        }
+                
         topLineLabels = {
             "wcText": [31+leftMargin, 78, 'words', 'left'],
             
+            "contextLabel": [5+columnWidth+leftMargin, 78, 'If no words:', 'left'],
 
-
-            # "wcText": [31+leftMargin, 78, 'words with', 'left'],
-
-           # "lenTextTwo": [133+leftMargin, 10, u'–', 'center'],
-            #"lenTextThree": [176+leftMargin, -0, 'letters', 'left'],
-        }        
-
-        # for label, values in topLineFields.items():
-        #     setattr(self.w, label, EditText((values[0], 0+yPos, 28, 22), text=values[1], placeholder=str(values[2])))
+        }   
 
         self.w.wordCount = EditText( (0+leftMargin, 0+yPos, 28, 22), text=self.wordCount, placeholder=self.wordCount, callback=self.wordCountCallback) 
         
 
-        for label, values in topLineLabels.items():
-            setattr(self.w, label, TextBox((values[0], 3+yPos, values[1], 22), text=values[2], alignment=values[3]))
 
- 
-        setattr(self.w, "context", TextBox(31+leftMargin, 3+yPos, 78, text='a', alignment='left' ) )         
+
+
+        for label, values in topLineLabels.items():
+            setattr( self.w, label, TextBox( ( values[0], 3+yPos, values[1], 22), text=values[2], alignment=values[3] ) )
+
+                
         
         yPos += lineHeight * 1.3
         
@@ -111,9 +98,9 @@ class MM2SpaceCenter:
         # language selection
         languageOptions = list(self.languageNames)
         
+      
         
-        
-        self.w.source = PopUpButton((leftMargin, yPos, 85, 20), [], sizeStyle="small", callback=self.changeSourceCallback)
+        self.w.source = PopUpButton((leftMargin, yPos, columnWidth, 20), [], sizeStyle="small", callback=self.changeSourceCallback)
         self.w.source.setItems(languageOptions)
         
         self.w.source.set(4) #default to English for now
@@ -123,7 +110,7 @@ class MM2SpaceCenter:
         
         ##### add drop down to choose context: auto, UC, lc, figs, ??, not functional yet, but made as a placeholder
         
-        self.contextOptions = ['Auto', 'UC', 'LC', 'Figs']
+        self.contextOptions = ['Auto', 'UC', 'LC', 'Figs', 'Frac']
         self.w.context = PopUpButton((leftMargin+90, yPos, 85, 20), [], sizeStyle="small", callback=self.changeContextCallback)
         self.w.context.setItems(self.contextOptions)
         self.w.context.set(0) #default to 'Auto'
@@ -340,19 +327,7 @@ class MM2SpaceCenter:
         self.wordsForMMPair()
 
 
-        
-        #pass
-        
-        
-    # def getMetricsMachineController(self):
-    #     # Iterate through ALL OBJECTS IN PYTHON!
-    #     import gc
-    #     for obj in gc.get_objects():
-    #         if hasattr(obj, "__class__"):
-    #             # Does this one have a familiar name? Cool. Assume that we have what we are looking for.
-    #             if obj.__class__.__name__ == "MetricsMachineController":
-    #                 return obj
-                
+                 
 
 
 
@@ -440,19 +415,6 @@ class MM2SpaceCenter:
     def lcString(self, pairstring):
         string = 'non'+pairstring+'nono'+pairstring+'oo' #lc
         
-        # if self.context == 'Auto':
-        #     string = 'non'+pairstring+'nono'+pairstring+'oo' #lc
-
-        # if self.context == 'UC':
-        #     string = 'HH'+pairstring+'HOHO'+pairstring+'OO'
-
-
-        # if self.context == 'LC':
-        #     string = 'non'+pairstring+'nono'+pairstring+'oo' #lc
-        
-        # if self.context == 'Figs':
-        #     string = '11'+pairstring+'1010'+pairstring+'00' #use for numbers
-            
         return string
             
 
@@ -471,18 +433,45 @@ class MM2SpaceCenter:
         
         if self.context == 'Figs':
             string = '11'+pairstring+'1010'+pairstring+'00' #use for numbers
+ 
+
+ 
+        if self.context == 'Frac': 
+            # start with figs context
+            string = '11'+pairstring+'1010'+pairstring+'00' #use for numbers
+
+            #look for fraction at start of pair
+            if pairstring.startswith('⁄'): ##fraction unicode glyph, not slash
+                string = '11/eight.numr '+pairstring+' 10/one.numr '+pairstring+'00'
+                #print('starts')
+
+            #look for fraction at end of pair    
+            if pairstring.endswith('⁄'): ##fraction unicode glyph, not slash
+                string = '11'+pairstring+'/eight.dnom 10'+pairstring+'/eight.dnom 00'
+                #print('ends')
+
+
+
+
+        # if self.context == 'Dnom':
+        #     string = '/one.dnom /one.dnom '+pairstring+'/one.dnom /zero.dnom '+pairstring+'/zero.dnom /zero.dnom ' #use for dnom2dnom
+  
+ 
+         #### not sure about including these
+        # if self.context == 'Numr Frac':
+        #     string = '11'+pairstring+'/fraction /eight.dnom 10'+pairstring+'/fraction /eight.dnom 00' #use for numr in fraction
+             
+        # if self.context == 'Dnom Frac':
+        #     string = '11/eight.numr /fraction '+pairstring+' 10/one.numr /fraction '+pairstring+'00' #use for dnom after /fraction
+             
+       
+ 
             
         return string
 
 
             
 
-        #string = '11'+pairstring+'/fraction /eight.dnom 10'+pairstring+'/fraction /eight.dnom 00' #use for fracs
-        #string = '11/eight.numr /fraction '+pairstring+' 10/one.numr /fraction '+pairstring+'00' #use for fracs2
-        #string = '11/eight.numr '+pairstring+' 10/one.numr '+pairstring+'00' #use for fracs2
-        #string = '11'+pairstring+'/eight.dnom 10'+pairstring+'/eight.dnom 00' #use for fracs
-
-        #string = '/one.dnom /one.dnom '+pairstring+'/one.dnom /zero.dnom '+pairstring+'/zero.dnom /zero.dnom ' #use for dnoms
 
 
         return string
