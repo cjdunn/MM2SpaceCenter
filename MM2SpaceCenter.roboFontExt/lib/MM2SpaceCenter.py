@@ -70,16 +70,18 @@ class MM2SpaceCenter:
 
         
         yPos += (lineHeight * 1.2) 
+        
+        wordCountInputWidth = 34
 
                 
         topLineLabels = {
-            "wcText": [31+leftMargin, 78, 'words', 'left'],
+            "wcText": [leftMargin+wordCountInputWidth+3, 78, 'words', 'left'],
             
             "contextLabel": [5+columnWidth+leftMargin, 78, 'If no words:', 'left'],
 
         }   
 
-        self.w.wordCount = EditText( (0+leftMargin, 0+yPos, 28, 22), text=self.wordCount, placeholder=self.wordCount, callback=self.wordCountCallback) 
+        self.w.wordCount = EditText( (0+leftMargin, 0+yPos, wordCountInputWidth, 22), text=self.wordCount, placeholder=self.wordCount, callback=self.wordCountCallback) 
         
 
 
