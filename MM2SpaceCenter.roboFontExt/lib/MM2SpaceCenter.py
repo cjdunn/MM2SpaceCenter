@@ -120,8 +120,13 @@ class MM2SpaceCenter:
         ##### add drop down to choose context: auto, UC, lc, figs, ??, not functional yet, but made as a placeholder
         
         self.contextOptions = ['Auto', 'UC', 'LC', 'Figs']
-        self.w.context = PopUpButton((leftMargin+90, yPos, 85, 20), [], sizeStyle="small", callback="")
+        self.w.context = PopUpButton((leftMargin+90, yPos, 85, 20), [], sizeStyle="small", callback=self.changeContextCallback)
         self.w.context.setItems(self.contextOptions)
+        self.w.context.set(0) #default to 'Auto'
+        
+        self.context = None
+        self.context = self.contextOptions[self.w.context.get()] #get the list item string, not just list index
+        
 
 
         yPos += lineHeight * 1.2
@@ -240,6 +245,18 @@ class MM2SpaceCenter:
         self.wordsForMMPair()
         
         #print ('source changed')
+
+
+
+    def changeContextCallback(self, sender):
+        """On changing source/wordlist, check if a custom word list should be loaded."""
+        
+        self.context = self.context = self.contextOptions[self.w.context.get()]
+        
+        self.wordsForMMPair()
+        if self.debug == True:
+            print('Context =', self.context)
+
 
 
     def sortWordsByWidth(self, wordlist):
@@ -417,8 +434,45 @@ class MM2SpaceCenter:
         
 
     def lcString(self, pairstring):
-        string = 'non'+pairstring+'nono'+pairstring+'oo' #temp commented out
-        #string = '11'+pairstring+'1010'+pairstring+'00' #use for numbers
+        string = 'non'+pairstring+'nono'+pairstring+'oo' #lc
+        
+        # if self.context == 'Auto':
+        #     string = 'non'+pairstring+'nono'+pairstring+'oo' #lc
+
+        # if self.context == 'UC':
+        #     string = 'HH'+pairstring+'HOHO'+pairstring+'OO'
+
+
+        # if self.context == 'LC':
+        #     string = 'non'+pairstring+'nono'+pairstring+'oo' #lc
+        
+        # if self.context == 'Figs':
+        #     string = '11'+pairstring+'1010'+pairstring+'00' #use for numbers
+            
+        return string
+            
+
+    def getSpacingString(self, pairstring):
+        string = 'non'+pairstring+'nono'+pairstring+'oo' #lc
+        
+        if self.context == 'Auto':
+            string = 'non'+pairstring+'nono'+pairstring+'oo' #lc
+
+        if self.context == 'UC':
+            string = 'HH'+pairstring+'HOHO'+pairstring+'OO'
+
+
+        if self.context == 'LC':
+            string = 'non'+pairstring+'nono'+pairstring+'oo' #lc
+        
+        if self.context == 'Figs':
+            string = '11'+pairstring+'1010'+pairstring+'00' #use for numbers
+            
+        return string
+
+
+            
+
         #string = '11'+pairstring+'/fraction /eight.dnom 10'+pairstring+'/fraction /eight.dnom 00' #use for fracs
         #string = '11/eight.numr /fraction '+pairstring+' 10/one.numr /fraction '+pairstring+'00' #use for fracs2
         #string = '11/eight.numr '+pairstring+' 10/one.numr '+pairstring+'00' #use for fracs2
@@ -606,12 +660,10 @@ class MM2SpaceCenter:
             return ""
 
 
+
     def wordsForMMPair(self, ):
         
-        
         self.mixedCase = False
-
-
         
         ### temp comment out to check speed
         self.source = self.w.source.get()
@@ -791,63 +843,90 @@ class MM2SpaceCenter:
                 
         # if no words are found, show spacing string and previous text
         if len(text) == 0:
+            
 
             #do i need to get pairstring again or can I used the previous one? 
             #pairstring = self.getPairstring(self.pair)
 
             previousText = '\\n no words for pair ' + pairstring
-            
+        
             self.messageText = '😞 no words found: '+ pairstring
             self.w.myTextBox.set(self.messageText) 
-            
+        
+
+
             if makeUpper == True:
+                
+                
 
                 text = self.ucString(pairstring)+ previousText
 
-                
+                if self.context != 'Auto':
+                    text = self.getSpacingString(pairstring)+ previousText
+
+
+
+            
                 if self.w.openCloseContext.get() == True: # if "show open+close" is checked, add this to text
-                    
-                    
+                
+                
                     openClosePair = self.openCloseContextReturn( self.pair)  
-                    
+                
                     ### debug start 2
                     #print ('openClosePair:'+openClosePair+'#')
                     openClosePair= openClosePair.lstrip()
-                    
-                    
+                
+                
                     #print ('openClosePair:'+openClosePair+'#')
                     ### debug end 2
-                    
+                
                     if len(openClosePair) > 0 : ## pair found                 
                         spacingString = self.ucString( openClosePair )
 
                     else: ## pair not found
-                        
+                    
                         if self.debug == True:
                             print ('open+close pair not found')
                         spacingString = self.ucString( pairstring )
-                    
-                    
-                    
-                    
+                
+                
+                    ## for uc pair, if not auto, use context dropdown 
+                    if self.context != 'Auto':
+                        
+                        spacingString = self.getSpacingString(pairstring)
+
+
+
                     spacingString = spacingString.replace("  ", " ") ## extra space gets added, later maybe it's best to change self.ucString function??
                     spacingString = spacingString.replace("  ", " ") ## do again to catch double spaces 
-                    
-                    
+                                
                     text = spacingString + previousText                
-                
-                
-                
-                
-                
+            
+            
+            
+            
+            
                 if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
                     text = self.pairMirrored(self.pair) + text 
 
 
 
-
+                        
+            ## for non uc pair, if not auto, use context dropdown 
             else:
-                text = self.lcString(pairstring)+ previousText
+                ## auto will choose lc string
+                spacingString = self.lcString(pairstring)
+
+                ## non-auto option will use dropdown context
+                if self.context != 'Auto':
+                    spacingString = self.getSpacingString(pairstring)
+                                    
+                
+                text = spacingString + previousText
+                
+
+                    
+                
                 if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
                     text = self.pairMirrored(self.pair) + text 
                 if self.w.openCloseContext.get() == True: # if "show open+close" is checked, add this to text
@@ -858,7 +937,7 @@ class MM2SpaceCenter:
                     text = self.openCloseContextReturn(self.pair) + text 
 
                     openClosePair = self.openCloseContextReturn( self.pair) 
-                    
+                
                     ### debug start
                     #print ('openClosePair:'+openClosePair+'#')
                     #print ('pair:'+str(self.pair)+'#')
@@ -868,46 +947,52 @@ class MM2SpaceCenter:
 
                     openClosePair = openClosePair.replace("  ", " ") ## extra space gets added, later maybe it's best to change self.ucString function??
                     openClosePair = openClosePair.replace("  ", " ") ## do again to catch double spaces 
-                    
-                    
-                    
+                
+                
+                
                     if len(openClosePair) > 0 : ## pair found 
-                                      
+                                  
                         spacingString = self.lcString( openClosePair )
-                        
+                    
                     else:
                         if self.debug == True:
                             print ('open+close pair not found')
-                        
+                    
                         spacingString = self.lcString( pairstring )
-                        
+                    
                     spacingString = spacingString.replace("  ", " ")                    
                     # spacingString = spacingString.replace("  ", " ") ## do again to catch double spaces 
-                    
-                    
-                                        
+                
+                
+                                    
                     text = spacingString + previousText   
 
 
-            
+        
 
             text = text.lstrip() #remove whitespace  
             self.setSpaceCenter(self.font, text)
 
 
-        
+
+                
+
+
+
+
+
+
+        ## Success! words are found : )
         else:
             #set space center if words are found
             #not sure why there's always a /slash in from of the first word, added ' '+ to avoid losing the first word
-            
+        
             text = text.lstrip() #remove whitespace             
 
             self.setSpaceCenter(self.font, text)
 
             self.messageText = '😎 words found: '+ pairstring
             self.w.myTextBox.set(self.messageText)
-
-
 
 
 
