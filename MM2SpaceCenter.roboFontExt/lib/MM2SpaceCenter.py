@@ -78,13 +78,15 @@ class MM2SpaceCenter:
         
         topLineFields = {
             "wordCount": [0+leftMargin,   self.wordCount, 20],
-            #"minLength": [108+leftMargin, self.minLength, 3],
+            # "minLength": [108+leftMargin, self.minLength, 3],
             #"maxLength": [145+leftMargin, self.maxLength, 10],
         }
         topLineLabels = {
             "wcText": [31+leftMargin, 78, 'words', 'left'],
+            
 
-            #"wcText": [31+leftMargin, 78, 'words with', 'left'],
+
+            # "wcText": [31+leftMargin, 78, 'words with', 'left'],
 
            # "lenTextTwo": [133+leftMargin, 10, u'–', 'center'],
             #"lenTextThree": [176+leftMargin, -0, 'letters', 'left'],
@@ -99,6 +101,8 @@ class MM2SpaceCenter:
         for label, values in topLineLabels.items():
             setattr(self.w, label, TextBox((values[0], 3+yPos, values[1], 22), text=values[2], alignment=values[3]))
 
+ 
+        setattr(self.w, "context", TextBox(31+leftMargin, 3+yPos, 78, text='a', alignment='left' ) )         
         
         yPos += lineHeight * 1.3
         
