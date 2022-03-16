@@ -98,6 +98,7 @@ class MM2SpaceCenter:
         
         # language selection
         languageOptions = list(self.languageNames)
+        languageOptions.extend(["Any language"])
         
       
         
@@ -231,7 +232,7 @@ class MM2SpaceCenter:
                     w = line.strip() # strip whitespace from beginning/end
                     self.customWords.append(w)
                     
-        self.source = self.w.source.get()
+        ### self.source = self.w.source.get() ### commented out by Wei
         
         #update space center
         self.wordsForMMPair()
@@ -403,8 +404,20 @@ class MM2SpaceCenter:
         
         try:
             #print ('pair =', pair)
-            left = self.gname2char(CurrentFont(), pair[0])
-            right = self.gname2char(CurrentFont(), pair[1])
+
+            leftNoSuffix = pair[0]
+            rightNoSuffix = pair[1]
+
+            leftPeriodPos = pair[0].find(".")
+            if leftPeriodPos > 0:
+                leftNoSuffix = pair[0][:leftPeriodPos]
+
+            rightPeriodPos = pair[1].find(".")
+            if rightPeriodPos > 0:
+                rightNoSuffix = pair[1][:rightPeriodPos]
+
+            left = self.gname2char(CurrentFont(), leftNoSuffix)
+            right = self.gname2char(CurrentFont(), rightNoSuffix)
             pair_char = (left, right)
             return pair_char
         except:
@@ -658,10 +671,20 @@ class MM2SpaceCenter:
     def wordsForMMPair(self, ):
         
         self.mixedCase = False
-        
+
+
+        wordsAll = []
+
         ### temp comment out to check speed
         self.source = self.w.source.get()
-        wordsAll = self.dictWords[self.textfiles[self.source]] 
+
+        languageCount = len(self.textfiles)
+        if self.source == languageCount: # Use all languages
+            for i in range(languageCount):
+                # if any language: concatenate all the wordlists
+                wordsAll.extend(self.dictWords[self.textfiles[i]])
+        else:
+            wordsAll = self.dictWords[self.textfiles[self.source]]
         
         #default values are hard coded for now
        #self.wordCount = self.getIntegerValue(self.w.wordCount)
@@ -685,7 +708,7 @@ class MM2SpaceCenter:
         pairstring = self.getPairstring(self.pair)
 
         #convert MM tuple into search pair to check uc, lc, mixed case. Maybe need a different var name here? 
-        pair2char = ''.join(self.pair2char(self.pair))
+        pair2charString = ''.join(self.pair2char(self.pair))
         
         
         
@@ -701,16 +724,16 @@ class MM2SpaceCenter:
         #default value
         makeUpper = False
 
-        if pair2char.isupper():
+        if pair2charString.isupper():
             #print (pairstring, 'upper')
             makeUpper = True
             #make lower for searching
-            searchString = pair2char.lower()
+            searchString = pair2charString.lower()
 
         else:
             #print(pairstring, 'not upper')
             makeUpper = False
-            searchString = pair2char
+            searchString = pair2charString
             pass
 
         #check for mixed case
@@ -981,7 +1004,10 @@ class MM2SpaceCenter:
             #set space center if words are found
             #not sure why there's always a /slash in from of the first word, added ' '+ to avoid losing the first word
         
-            text = text.lstrip() #remove whitespace             
+            text = text.lstrip() #remove whitespace    
+
+            # replace normalised search pair with original suffixed pair
+            text = text.replace(pair2charString, '/'+'/'.join(self.pair)+' ' )                        
 
             self.setSpaceCenter(self.font, text)
 
