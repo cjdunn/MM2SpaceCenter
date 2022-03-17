@@ -22,8 +22,7 @@ Update: 2022-03-17
 –updated structure of UI (thanks @ryanbugden )  
 
 –added truncation for longer (unencoded) glyph names  
-
-–bugfix for mirrored pairs (thanks @arrowtype )  
+–bugfix for mirrored pairs (thanks @arrowtype )    
 
 
 
