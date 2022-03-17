@@ -52,7 +52,7 @@ class MM2SpaceCenter:
 
         w_w = 220 ## windowWidth ## was 200
         
-        self.messageText = '😎 Activated'
+        self.messageText = 'Activated 😎'
 
         self.wordCount = 20
         self.minLength = 3
@@ -70,10 +70,10 @@ class MM2SpaceCenter:
         #self.w.statusBar = Box((3, 0, -3, 30))
         #self.w.statusBar.text = TextBox((0, 0, -20, 50), self.messageText, sizeStyle="regular") ## revert to just a text box to save space
 
-        self.w.statusBar = TextBox((0, 0, -20, 50), self.messageText, sizeStyle="regular") ## revert to just a text box to save space
+        self.w.statusBar = TextBox((3, yPos, -10, 17), self.messageText, sizeStyle="regular") ## revert to just a text box to save space
 
 
-        yPos = 36
+        yPos += 22
         wordCountInputWidth = 34 ## was 45, I don't think over 999 is a good idea or needed
                 
         topLineLabels = {
