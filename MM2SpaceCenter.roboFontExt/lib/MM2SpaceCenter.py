@@ -52,7 +52,7 @@ class MM2SpaceCenter:
 
         w_w = 220 ## windowWidth ## was 200
         
-        self.messageText = 'Activated 😎'
+        self.messageText = '😎 Activated'
 
         self.wordCount = 20
         self.minLength = 3
@@ -70,7 +70,7 @@ class MM2SpaceCenter:
         #self.w.statusBar = Box((3, 0, -3, 30))
         #self.w.statusBar.text = TextBox((0, 0, -20, 50), self.messageText, sizeStyle="regular") ## revert to just a text box to save space
 
-        self.w.statusBar = TextBox((3, yPos, -10, 17), self.messageText, sizeStyle="regular") ## revert to just a text box to save space
+        self.w.statusBar = TextBox((0, yPos, -10, 17), self.messageText, sizeStyle="regular") ## revert to just a text box to save space
 
 
         yPos += 22
@@ -792,6 +792,9 @@ class MM2SpaceCenter:
             if len(pairstring) > 19:
                 self.messageText = '😞… '+ pairstring
 
+            if len(pairstring) > 29:
+                truncatedPairstring = pairstring[0:29]
+                self.messageText = '😞'+ truncatedPairstring+'…'
 
             self.w.statusBar.set(self.messageText) 
             
@@ -915,6 +918,10 @@ class MM2SpaceCenter:
             ## truncate message for longer pairstring             
             if len(pairstring) > 19:
                 self.messageText = '😎… '+ pairstring
+
+            if len(pairstring) > 29:
+                truncatedPairstring = pairstring[0:29]
+                self.messageText = '😎'+ truncatedPairstring+'…'
 
  
             self.w.statusBar.set(self.messageText)
