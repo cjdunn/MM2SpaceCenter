@@ -116,7 +116,10 @@ class MM2SpaceCenter:
         self.context = self.contextOptions[self.w.context.get()] #get the list item string, not just list index
         
 
-        yPos += lineHeight * 1.5
+        #yPos += lineHeight * 1.5
+        yPos += lineHeight * 1.3
+
+
         
         #self.w.line = HorizontalLine((leftMargin, yPos, -leftMargin, 1))
         
