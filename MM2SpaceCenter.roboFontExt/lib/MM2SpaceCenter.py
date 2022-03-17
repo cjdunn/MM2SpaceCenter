@@ -917,7 +917,10 @@ class MM2SpaceCenter:
                     spacingString = spacingString.replace("  ", " ") ## extra space gets added, later maybe it's best to change self.ucString function??
                     spacingString = spacingString.replace("  ", " ") ## do again to catch double spaces 
                                 
-                    text = spacingString + previousText                
+                    if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
+                        text = self.pairMirrored(self.pair) + spacingString + previousText
+                    else:
+                        text = spacingString + previousText                
             
             
             
@@ -939,7 +942,10 @@ class MM2SpaceCenter:
                     spacingString = self.getSpacingString(pairstring)
                                     
                 
-                text = spacingString + previousText
+                if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
+                    text = self.pairMirrored(self.pair) + spacingString + previousText
+                else:
+                    text = spacingString + previousText
                 
 
                     
@@ -981,8 +987,10 @@ class MM2SpaceCenter:
                     # spacingString = spacingString.replace("  ", " ") ## do again to catch double spaces 
                 
                 
-                                    
-                    text = spacingString + previousText   
+                    if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
+                        text = self.pairMirrored(self.pair) + spacingString + previousText
+                    else:
+                        text = spacingString + previousText   
 
 
         
