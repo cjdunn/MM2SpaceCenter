@@ -52,7 +52,7 @@ class MM2SpaceCenter:
 
         w_w = 220 ## windowWidth ## was 200
         
-        self.messageText = '😎 Activated'
+        self.messageText = '  😎 Activated' ##intentionally added 2 spaces at beginning, these get removed when paistring is too long
 
         self.wordCount = 20
         self.minLength = 3
@@ -787,7 +787,7 @@ class MM2SpaceCenter:
             #pairstring = self.getPairstring(self.pair)
             previousText = '\\n no words for pair ' + pairstring
                             
-            self.messageText = '😞 not found: '+ pairstring
+            self.messageText = '  😞 not found: '+ pairstring
             #print(len(pairstring)) ## debugging
 
 
@@ -915,7 +915,7 @@ class MM2SpaceCenter:
 
             self.setSpaceCenter(self.font, text)
 
-            self.messageText = '😎 found: '+ pairstring
+            self.messageText = '  😎 found: '+ pairstring
             #print(len(pairstring)) ## debugging
  
             ## truncate message for longer pairstring             
