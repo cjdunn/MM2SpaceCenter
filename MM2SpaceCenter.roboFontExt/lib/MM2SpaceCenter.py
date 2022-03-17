@@ -67,8 +67,11 @@ class MM2SpaceCenter:
         yPos = topMargin
 
 
-        self.w.statusBar = Box((3, 0, -3, 30))
-        self.w.statusBar.text = TextBox((0, 0, -20, 50), self.messageText, sizeStyle="regular") ## revert to just a text box to save space
+        #self.w.statusBar = Box((3, 0, -3, 30))
+        #self.w.statusBar.text = TextBox((0, 0, -20, 50), self.messageText, sizeStyle="regular") ## revert to just a text box to save space
+
+        self.w.statusBar = TextBox((0, 0, -20, 50), self.messageText, sizeStyle="regular") ## revert to just a text box to save space
+
 
         yPos = 36
         wordCountInputWidth = 34 ## was 45, I don't think over 999 is a good idea or needed
@@ -783,7 +786,7 @@ class MM2SpaceCenter:
         
             self.messageText = '😞 no words found: '+ pairstring
 
-            self.w.statusBar.text.set(self.messageText) 
+            self.w.statusBar.set(self.messageText) 
         
             if makeUpper == True:
                 
@@ -900,7 +903,7 @@ class MM2SpaceCenter:
 
             self.messageText = '😎 words found: '+ pairstring
 
-            self.w.statusBar.text.set(self.messageText)
+            self.w.statusBar.set(self.messageText)
 
 
 
