@@ -13,17 +13,17 @@ Pull requests are greatly appreciated 🙏
 
 Update: 2022-03-17
 
-–added options for if no pair if found: Auto, UC, LC, Figs, Frac
+–added options for if no pair if found: Auto, UC, LC, Figs, Frac  
 
-–made word count field wider
+–made word count field wider  
 
-–added support for suffixed glyphs and "any language" option (thanks @weiweihuanghuang and @arrowtype )
+–added support for suffixed glyphs and "any language" option (thanks @weiweihuanghuang and @arrowtype )  
 
-–updated structure of UI (thanks @ryanbugden )
+–updated structure of UI (thanks @ryanbugden )  
 
-–added truncation for longer (unencoded) glyph names
+–added truncation for longer (unencoded) glyph names  
 
-–bugfix for mirrored pairs (thanks @arrowtype )
+–bugfix for mirrored pairs (thanks @arrowtype )  
 
 
 
