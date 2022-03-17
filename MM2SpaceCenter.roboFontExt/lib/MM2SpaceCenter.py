@@ -353,8 +353,6 @@ class MM2SpaceCenter:
         escapeList = ['slash', 'backslash']
         
         if (not font[gname].unicodes) or (gname in escapeList):
-            #scString = '/'+gname+' '
-            
             scString = self.spaceCenterStringForUnencoded(gname)
             
         else: 
@@ -373,8 +371,8 @@ class MM2SpaceCenter:
         return pairstring
 
 
-    #convert char gnames to chars to find words in dict
     def pair2char(self, pair):
+        """Convert char gnames to chars to find words in dict."""
         
         self.debug = False
         
@@ -841,7 +839,7 @@ class MM2SpaceCenter:
                     if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
                         text = self.pairMirrored(self.pair) + spacingString + previousText
                     else:
-                        text = spacingString + previousText                
+                        text = spacingString + previousText
             
                 if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
                     text = self.pairMirrored(self.pair) + text 
@@ -926,19 +924,13 @@ class MM2SpaceCenter:
                 truncatedPairstring = pairstring[0:29]
                 self.messageText = '😎'+ truncatedPairstring+'…'
 
- 
             self.w.statusBar.set(self.messageText)
-            
-
 
 
 def run():
     if not len(AllFonts()) > 0:
         print ('you must have a font open')
         return
-
-
-    
 
     try:
         p = metricsMachine.GetCurrentPair()
