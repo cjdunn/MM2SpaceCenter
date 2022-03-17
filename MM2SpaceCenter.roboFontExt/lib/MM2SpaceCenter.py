@@ -23,7 +23,7 @@ class MM2SpaceCenter:
     
     def activateModule(self):
         addObserver(self, "MMPairChangedObserver", "MetricsMachine.currentPairChanged")
-        
+
         print ('MM2SpaceCenter activated')
 
 
@@ -59,11 +59,13 @@ class MM2SpaceCenter:
         self.maxLength = 15
         
         self.activateModule()
+
         self.w = Window((w_w, 0), "MM2SpaceCenter")
         self.w.getNSWindow().setTitlebarHeight_(26)
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         
         yPos = topMargin
+
 
         self.w.statusBar = Box((3, 0, -3, 30))
         self.w.statusBar.text = TextBox((0, 0, -20, 50), self.messageText, sizeStyle="regular")
@@ -76,12 +78,12 @@ class MM2SpaceCenter:
             "contextLabel": [second_col_x, 78, 'If no words:', 'left'],
         }   
 
+
         self.w.wordCount = NumberEditText((leftMargin, 0+yPos, wordCountInputWidth, 22), text=self.wordCount, callback=self.wordCountCallback, allowFloat=False, allowNegative=False)
         # EditText( (leftMargin, 0+yPos, wordCountInputWidth, 22), text=self.wordCount, placeholder=self.wordCount, callback=self.wordCountCallback) 
         self.w.wordCount.getNSTextField().setFocusRingType_(1)
         for label, values in topLineLabels.items():
             setattr( self.w, label, TextBox( ( values[0], 3+yPos, values[1], 22), text=values[2], alignment=values[3] ) )
-
 
         yPos += lineHeight * 1.3
         
@@ -90,7 +92,7 @@ class MM2SpaceCenter:
         # language selection
         languageOptions = list(self.languageNames)
         languageOptions.extend(["Any language"])
-        
+       
         self.w.source = PopUpButton((leftMargin, yPos, columnWidth, 20), [], sizeStyle="small", callback=self.changeSourceCallback)
         self.w.source.setItems(languageOptions)
         
@@ -98,21 +100,25 @@ class MM2SpaceCenter:
         self.source = None 
         self.source = self.w.source.get() #get value, to use for other functions
         
+
         ##### add drop down to choose context: auto, UC, lc, figs, ??, not functional yet, but made as a placeholder
         
         self.contextOptions = ['Auto', 'UC', 'LC', 'Figs', 'Frac']
         self.w.context = PopUpButton((second_col_x, yPos, -leftMargin, 20), [], sizeStyle="small", callback=self.changeContextCallback)
+
         self.w.context.setItems(self.contextOptions)
         self.w.context.set(0) #default to 'Auto'
         
         self.context = None
         self.context = self.contextOptions[self.w.context.get()] #get the list item string, not just list index
         
+
         yPos += lineHeight * 1.5
         
         self.w.line = HorizontalLine((leftMargin, yPos, -leftMargin, 1))
         
         yPos += 6
+
         
         checkBoxSize = 18
         self.w.listOutput = CheckBox((leftMargin+3, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
@@ -126,10 +132,12 @@ class MM2SpaceCenter:
 
         yPos += lineHeight * 1.0
         
+
         self.w.mirroredPair = CheckBox((leftMargin+3, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
         self.w.mirroredPairLabel = TextBox((checkBoxSize+12, yPos+2, -leftMargin, checkBoxSize), "Show mirrored pair (LRLR)", sizeStyle="small")
         
         yPos += lineHeight * 1.0
+
 
         self.w.allUppercase = CheckBox((leftMargin+3, yPos, checkBoxSize, checkBoxSize), "", sizeStyle="small", callback=self.sortedCallback)
         self.w.allUppercaseLabel = TextBox((checkBoxSize+12, yPos+2, -leftMargin, checkBoxSize), "All uppercase context", sizeStyle="small")
@@ -139,7 +147,7 @@ class MM2SpaceCenter:
         # resize window dynamically, as this UI continues to get built out
         w_x,w_y,w_w,w_h = self.w.getPosSize()
         self.w.resize(w_w, yPos+lineHeight+leftMargin-3, animate=False)
-        
+
         self.w.bind("close", self.deactivateModule)
         self.w.open()
         
@@ -221,7 +229,7 @@ class MM2SpaceCenter:
         
         #print ('source changed')
 
-
+        
     def changeContextCallback(self, sender):
         """On changing source/wordlist, check if a custom word list should be loaded."""
         
@@ -230,7 +238,7 @@ class MM2SpaceCenter:
         self.wordsForMMPair()
         if self.debug == True:
             print('Context =', self.context)
-
+            
 
     def sortWordsByWidth(self, wordlist):
         """Sort output word list by width."""
@@ -326,7 +334,6 @@ class MM2SpaceCenter:
         char = chr(uni)
         return char
 
-
     def spaceCenterStringForUnencoded(self, gname):
         
         scString = '/'+gname+' '
@@ -409,7 +416,7 @@ class MM2SpaceCenter:
         
         if self.context == 'Figs':
             string = '11'+pairstring+'1010'+pairstring+'00' #use for numbers
- 
+
         if self.context == 'Frac': 
             # start with figs context
             string = '11'+pairstring+'⁄1010⁄'+pairstring+'00' #use for numbers
@@ -435,6 +442,7 @@ class MM2SpaceCenter:
         # if self.context == 'Dnom Frac':
         #     string = '11/eight.numr /fraction '+pairstring+' 10/one.numr /fraction '+pairstring+'00' #use for dnom after /fraction
              
+
         return string
 
         return string
@@ -478,13 +486,17 @@ class MM2SpaceCenter:
         
         "<": ">", #less, greater
         ">": "<", #greater, less
-        
+
         # opening/closing punctuation (from https://www.compart.com/en/unicode/category/Ps & https://www.compart.com/en/unicode/category/Pe)
         "(": ")",
         "[": "]",
         "{": "}",
         "༺": "༻", "༼": "༽", "᚛": "᚜", "‚": "‘", "„": "“", "⁅": "⁆", "⁽": "⁾", "₍": "₎", "⌈": "⌉", "⌊": "⌋", "〈": "〉", "❨": "❩", "❪": "❫", "❬": "❭", "❮": "❯", "❰": "❱", "❲": "❳", "❴": "❵", "⟅": "⟆", "⟦": "⟧", "⟨": "⟩", "⟪": "⟫", "⟬": "⟭", "⟮": "⟯", "⦃": "⦄", "⦅": "⦆", "⦇": "⦈", "⦉": "⦊", "⦋": "⦌", "⦍": "⦎", "⦏": "⦐", "⦑": "⦒", "⦓": "⦔", "⦕": "⦖", "⦗": "⦘", "⧘": "⧙", "⧚": "⧛", "⧼": "⧽", "⸢": "⸣", "⸤": "⸥", "⸦": "⸧", "⸨": "⸩", "〈": "〉", "《": "》", "「": "」", "『": "』", "【": "】", "〔": "〕", "〖": "〗", "〘": "〙", "〚": "〛", "〝": "〞", "⹂": "〟", "﴿": "﴾", "︗": "︘", "︵": "︶", "︷": "︸", "︹": "︺", "︻": "︼", "︽": "︾", "︿": "﹀", "﹁": "﹂", "﹃": "﹄", "﹇": "﹈", "﹙": "﹚", "﹛": "﹜", "﹝": "﹞", "（": "）", "［": "］", "｛": "｝", "｟": "｠", "｢": "｣", 
+   
+   
+   
     }
+
 
 
     openCloseUnencodedPairs = {
@@ -512,6 +524,7 @@ class MM2SpaceCenter:
     # }
 
     
+
     def openCloseContextReturn(self, pair):
         if self.w.openCloseContext.get() == True:
 
@@ -526,6 +539,7 @@ class MM2SpaceCenter:
             #print ('left:', left, self.leftEncoded)
             #print ('right:', right, self.rightEncoded)
             
+
             openCloseString = ""
 
             for openClose in self.openClosePairs.items():
@@ -573,7 +587,7 @@ class MM2SpaceCenter:
                         #print ( 'right unencoded pair found' )  
                                               
                         openCloseString += self.spaceCenterStringForUnencoded(openCloseLeft) + left + right  + " "
-                    
+
             return openCloseString
             
         else:
@@ -590,11 +604,13 @@ class MM2SpaceCenter:
             return ""
 
 
+
     def wordsForMMPair(self, ):
         
         self.mixedCase = False
 
         wordsAll = []
+
 
         ### temp comment out to check speed
         self.source = self.w.source.get()
@@ -628,6 +644,7 @@ class MM2SpaceCenter:
 
         #convert MM tuple into search pair to check uc, lc, mixed case. Maybe need a different var name here? 
         pair2charString = ''.join(self.pair2char(self.pair))
+
         
         #check Encoding
         
@@ -718,6 +735,11 @@ class MM2SpaceCenter:
         if self.w.allUppercase.get() == True:
             makeUpper = True
 
+        ###### check All Uppercase setting, and if true set variable makeUpper to True, which makes space center text UC
+        if self.w.allUppercase.get() == True:
+            makeUpper = True
+
+
         if makeUpper == True:    
             #make text upper again
             ### should we force the pair to stay as is? for example with .uc punctuation if words are found, currently lc punct is shown. Should we find the pair in each work and re-insert the .uc version? 
@@ -740,6 +762,7 @@ class MM2SpaceCenter:
                 if self.w.mirroredPair.get() == True:  #if "start with mirrored pair" is checked, add this to text
                     text = self.pairMirrored(self.pair) + joinString + text 
                 if self.w.openCloseContext.get() == True: # if "show open+close" is checked, add this to text
+
                     text = self.openCloseContextReturn(self.pair) + text 
 
             else:
@@ -747,20 +770,25 @@ class MM2SpaceCenter:
                 if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
                     text = self.pairMirrored(self.pair) + text
                 if self.w.openCloseContext.get() == True: # if "show open+close" is checked, add this to text
+
                     text = self.openCloseContextReturn(self.pair) + text 
+
 
         # if no words are found, show spacing string and previous text
         if len(text) == 0:
+
             #do i need to get pairstring again or can I used the previous one? 
             #pairstring = self.getPairstring(self.pair)
             previousText = '\\n no words for pair ' + pairstring
         
             self.messageText = '😞 no words found: '+ pairstring
+
             self.w.statusBar.text.set(self.messageText) 
         
             if makeUpper == True:
                 
                 text = self.ucString(pairstring)+ previousText
+
 
                 if self.context != 'Auto':
                     text = self.getSpacingString(pairstring)+ previousText
@@ -801,6 +829,7 @@ class MM2SpaceCenter:
                 if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
                     text = self.pairMirrored(self.pair) + text 
  
+
             ## for non uc pair, if not auto, use context dropdown 
             else:
                 ## auto will choose lc string
@@ -810,15 +839,16 @@ class MM2SpaceCenter:
                 if self.context != 'Auto':
                     spacingString = self.getSpacingString(pairstring)
                                     
-                
                 if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
                     text = self.pairMirrored(self.pair) + spacingString + previousText
                 else:
                     text = spacingString + previousText
                 
+
                 if self.w.mirroredPair.get() == True: #if "start with mirrored pair" is checked, add this to text
                     text = self.pairMirrored(self.pair) + text 
                 if self.w.openCloseContext.get() == True: # if "show open+close" is checked, add this to text
+
 
                     text = self.openCloseContextReturn(self.pair) + text 
 
@@ -856,7 +886,6 @@ class MM2SpaceCenter:
             text = text.lstrip() #remove whitespace  
             self.setSpaceCenter(self.font, text)
 
-
         ## Success! words are found : )
         else:
             #set space center if words are found
@@ -870,6 +899,7 @@ class MM2SpaceCenter:
             self.setSpaceCenter(self.font, text)
 
             self.messageText = '😎 words found: '+ pairstring
+
             self.w.statusBar.text.set(self.messageText)
 
 
@@ -878,6 +908,9 @@ def run():
     if not len(AllFonts()) > 0:
         print ('you must have a font open')
         return
+
+
+    
 
     try:
         p = metricsMachine.GetCurrentPair()
@@ -892,6 +925,7 @@ def run():
         #return
 
     #p = metricsMachine.GetCurrentPair()
+
     
     #font = metricsMachine.CurrentFont()
 
