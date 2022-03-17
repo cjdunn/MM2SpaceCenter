@@ -783,10 +783,18 @@ class MM2SpaceCenter:
             #do i need to get pairstring again or can I used the previous one? 
             #pairstring = self.getPairstring(self.pair)
             previousText = '\\n no words for pair ' + pairstring
-        
-            self.messageText = '😞 no words found: '+ pairstring
+                            
+            self.messageText = '😞 not found: '+ pairstring
+            #print(len(pairstring)) ## debugging
+
+
+            ## truncate message for longer pairstring
+            if len(pairstring) > 19:
+                self.messageText = '😞… '+ pairstring
+
 
             self.w.statusBar.set(self.messageText) 
+            
         
             if makeUpper == True:
                 
@@ -901,9 +909,16 @@ class MM2SpaceCenter:
 
             self.setSpaceCenter(self.font, text)
 
-            self.messageText = '😎 words found: '+ pairstring
+            self.messageText = '😎 found: '+ pairstring
+            #print(len(pairstring)) ## debugging
+ 
+            ## truncate message for longer pairstring             
+            if len(pairstring) > 19:
+                self.messageText = '😎… '+ pairstring
 
+ 
             self.w.statusBar.set(self.messageText)
+            
 
 
 
